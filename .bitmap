@@ -9,5 +9,19 @@
  */
 
 {
+    "apps": {
+        "name": "apps",
+        "scope": "",
+        "version": "",
+        "defaultScope": "my-scope",
+        "mainFile": "index.ts",
+        "rootDir": "bit-components/my-scope/apps",
+        "config": {
+            "bitdev.node/node-env@5.0.3": {},
+            "teambit.envs/envs": {
+                "env": "bitdev.node/node-env"
+            }
+        }
+    },
     "$schema-version": "17.0.0"
 }
