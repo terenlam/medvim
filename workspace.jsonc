@@ -62,7 +62,8 @@
     "policy": {
       "dependencies": {
         "eslint-config-next": "^16.2.0",
-        "tailwindcss": "^4.2.2"
+        "tailwindcss": "^4.2.2",
+        "typescript-eslint": "^8.57.1"
       },
       "peerDependencies": {}
     },
