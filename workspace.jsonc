@@ -23,7 +23,7 @@
      * scope - scope name only, e.g. 'compilation'.
      * owner - owner name in bit.dev, e.g. 'teambit'.
      **/
-    "defaultDirectory": "bit-components/{scope}/{name}",
+    "defaultDirectory": "{scope}/{name}",
     /**
      * default scope for all components in workspace.
      **/
@@ -39,7 +39,11 @@
   **/
   "teambit.generator/generator": {
     "envs": [
-      "bitdev.node/node-env"
+      // "bitdev.node/node-env",
+      // "bitdev.react/react-env",
+      // "bitdev.vue/vue-env",
+      // "bitdev.angular/angular-env"
+      // "bitdev.symphony/envs/symphony-env"
     ]
   },
   /**
@@ -57,14 +61,14 @@
     "rootComponents": true,
     "policy": {
       "dependencies": {
-        "typescript-eslint": "^8.57.1"
+        "eslint-config-next": "^16.2.0",
+        "tailwindcss": "^4.2.2"
       },
       "peerDependencies": {}
     },
     "linkCoreAspects": true
   },
   "teambit.workspace/workspace-config-files": {
-    "enableWorkspaceConfigWrite": true,
-    "useDefaultDirectory": true
+    "enableWorkspaceConfigWrite": true
   }
 }
