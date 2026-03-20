@@ -60,14 +60,9 @@
     "allowScripts": {},
     "rootComponents": true,
     "policy": {
-      "dependencies": {
-        "eslint-config-next": "^16.2.0",
-        "tailwindcss": "^4.2.2",
-        "typescript-eslint": "^8.57.1"
-      },
+      "dependencies": {},
       "peerDependencies": {}
-    },
-    "linkCoreAspects": true
+    }
   },
   "teambit.workspace/workspace-config-files": {
     "enableWorkspaceConfigWrite": true

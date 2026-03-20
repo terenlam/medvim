@@ -9,17 +9,31 @@
  */
 
 {
-    "apps": {
-        "name": "apps",
+    "apps/api": {
+        "name": "apps/api",
         "scope": "",
         "version": "",
         "defaultScope": "my-scope",
         "mainFile": "index.ts",
-        "rootDir": "my-scope/apps",
+        "rootDir": "my-scope/apps/api",
         "config": {
             "bitdev.node/node-env@5.0.3": {},
             "teambit.envs/envs": {
                 "env": "bitdev.node/node-env"
+            }
+        }
+    },
+    "apps/web": {
+        "name": "apps/web",
+        "scope": "",
+        "version": "",
+        "defaultScope": "my-scope",
+        "mainFile": "index.ts",
+        "rootDir": "my-scope/apps/web",
+        "config": {
+            "bitdev.react/react-env@5.0.5": {},
+            "teambit.envs/envs": {
+                "env": "bitdev.react/react-env"
             }
         }
     },

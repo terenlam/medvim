@@ -2,6 +2,6 @@
 /**
  * returns 'hello world'
  */
-export function apps() {
+export function api() {
   return 'hello world';
 }
