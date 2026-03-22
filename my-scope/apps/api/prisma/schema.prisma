@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Drug {
+  id     String @id
+  rxnorm String @unique
+  name   String
+
+  cascadesA Cascade[] @relation("DrugA")
+  cascadesB Cascade[] @relation("DrugB")
+}
+
+model Cascade {
+  id String @id @default(uuid())
+
+  drugAId String
+  drugBId String
+
+  adverseEffect String
+  indication    String
+  solution      String
+  reference     String
+
+  drugA Drug @relation("DrugA", fields: [drugAId], references: [id])
+  drugB Drug @relation("DrugB", fields: [drugBId], references: [id])
+}
