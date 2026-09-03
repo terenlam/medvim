@@ -3,12 +3,11 @@ import { Kbd } from "@/components/ui/kbd";
 interface DashboardKey {
   key: string;
   description: string;
-  icon: string;
 }
 
 const dashboardKeys: DashboardKey[] = [
-  { icon: "+", key: "a", description: "Ajouter un médicament" },
-  { icon: "?", key: "h", description: "Aide" },
+  { key: "a", description: "Ajouter un médicament" },
+  { key: "h", description: "Aide" },
 ];
 
 const header = "Medvim";
@@ -20,12 +19,9 @@ export function Dashboard() {
         <h1 className="text-2xl">{header}</h1>
 
         <div aria-label="Dashboard shortcuts" className="mt-8 flex flex-col gap-2 text-sm min-w-64">
-          {dashboardKeys.map(({ icon, key, description }) => (
+          {dashboardKeys.map(({ key, description }) => (
             <div key={key} className="flex justify-between">
-              <div className="flex gap-2">
-                <span>{icon}</span>
-                <span>{description}</span>
-              </div>
+              <span>{description}</span>
               <Kbd>{key}</Kbd>
             </div>
           ))}
