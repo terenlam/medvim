@@ -7,6 +7,7 @@ interface DashboardKey {
 
 const dashboardKeys: DashboardKey[] = [
   { key: "a", description: "Ajouter un médicament" },
+  { key: "s", description: "Chercher un médicament" },
   { key: "h", description: "Aide" },
 ];
 
