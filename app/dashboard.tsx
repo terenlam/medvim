@@ -1,3 +1,5 @@
+import { Kbd } from "@/components/ui/kbd";
+
 interface DashboardKey {
   key: string;
   description: string;
@@ -24,7 +26,7 @@ export function Dashboard() {
                 <span>{icon}</span>
                 <span>{description}</span>
               </div>
-              <kbd>{key}</kbd>
+              <Kbd>{key}</Kbd>
             </div>
           ))}
         </div>
