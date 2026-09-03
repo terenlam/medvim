@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { CommandWithShortcuts } from "./command-box";
 
+// cmdk relies on browser APIs that jsdom doesn't provide, so mock them
+// to prevent environment-related errors while testing the component.
 class ResizeObserverMock {
   observe() {}
   unobserve() {}
@@ -19,22 +21,20 @@ function pressKey(key: string, target?: Window | Element) {
 describe("CommandWithShortcuts", () => {
   it("has no button to open the menu", () => {
     render(<CommandWithShortcuts />);
-    expect(
-      screen.queryByRole("button", { name: "Open Menu" })
-    ).toBeNull();
+    expect(screen.queryByRole("button", { name: "Open Menu" })).toBeNull();
+  });
+
+  it("does not open the command box when 'a' is not pressed in normal mode", () => {
+    render(<CommandWithShortcuts />);
+    expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
   });
 
   it("opens the command box when pressing 'a' in normal mode", () => {
     render(<CommandWithShortcuts />);
-    expect(
-      screen.queryByPlaceholderText("Type a command or search...")
-    ).toBeNull();
 
     pressKey("a");
 
-    expect(
-      screen.getByPlaceholderText("Type a command or search...")
-    ).toBeDefined();
+    expect(screen.getByPlaceholderText("Type a command or search...")).toBeDefined();
   });
 
   it("does not open when typing 'a' into another text field", () => {
@@ -44,10 +44,10 @@ describe("CommandWithShortcuts", () => {
 
     pressKey("a", field);
 
-    expect(
-      screen.queryByPlaceholderText("Type a command or search...")
-    ).toBeNull();
-    document.body.removeChild(field);
+    expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
+    onTestFinished(() => {
+      document.body.removeChild(field);
+    });
   });
 
   it("types 'a' into the input instead of reopening when open", () => {
@@ -55,17 +55,11 @@ describe("CommandWithShortcuts", () => {
 
     pressKey("a");
 
-    const input = screen.getByPlaceholderText(
-      "Type a command or search..."
-    ) as HTMLInputElement;
+    const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
     input.focus();
 
-    // In insert mode the 'a' goes to the focused input; it does not
-    // toggle/reopen the box.
     pressKey("a", input);
-    expect(
-      screen.getByPlaceholderText("Type a command or search...")
-    ).toBeDefined();
+    expect(screen.getByPlaceholderText("Type a command or search...")).toBeDefined();
 
     fireEvent.change(input, { target: { value: "a" } });
     expect(input.value).toBe("a");
