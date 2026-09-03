@@ -1,7 +1,10 @@
+import { Fragment } from "react";
+import { Dashboard } from "./dashboard";
+
 export default function Page() {
   return (
-    <div>
-      <h1>Medvim</h1>
-    </div>
+    <Fragment>
+      <Dashboard />
+    </Fragment>
   );
 }
