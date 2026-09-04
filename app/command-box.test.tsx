@@ -1,22 +1,7 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+/** @vitest-environment happy-dom */
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { CommandWithShortcuts } from "./command-box";
-
-// cmdk relies on browser APIs that jsdom doesn't provide, so mock them
-// to prevent environment-related errors while testing the component.
-class ResizeObserverMock {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-
-beforeAll(() => {
-  globalThis.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
-  Element.prototype.scrollIntoView = () => {};
-});
-
-function pressKey(key: string, target?: Window | Element) {
-  fireEvent.keyDown(target ?? window, { key });
-}
 
 describe("CommandWithShortcuts", () => {
   it("has no button to open the menu", () => {
@@ -29,20 +14,22 @@ describe("CommandWithShortcuts", () => {
     expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
   });
 
-  it("opens the command box when pressing 'a' in normal mode", () => {
+  it("opens the command box when pressing 'a' in normal mode", async () => {
+    const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    pressKey("a");
+    await user.keyboard("a");
 
     expect(screen.getByPlaceholderText("Type a command or search...")).toBeDefined();
   });
 
-  it("does not open when typing 'a' into another text field", () => {
+  it("does not open when typing 'a' into another text field", async () => {
     render(<CommandWithShortcuts />);
     const field = document.createElement("input");
     document.body.appendChild(field);
 
-    pressKey("a", field);
+    const user = userEvent.setup();
+    await user.type(field, "a");
 
     expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
     onTestFinished(() => {
@@ -50,18 +37,18 @@ describe("CommandWithShortcuts", () => {
     });
   });
 
-  it("types 'a' into the input instead of reopening when open", () => {
+  it("types 'a' into the input instead of reopening when open", async () => {
+    const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    pressKey("a");
+    await user.keyboard("a");
 
     const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
     input.focus();
 
-    pressKey("a", input);
+    await user.keyboard("a");
     expect(screen.getByPlaceholderText("Type a command or search...")).toBeDefined();
-
-    fireEvent.change(input, { target: { value: "a" } });
     expect(input.value).toBe("a");
   });
 });
+
