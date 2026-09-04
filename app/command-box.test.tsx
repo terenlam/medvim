@@ -24,11 +24,12 @@ describe("CommandWithShortcuts", () => {
   });
 
   it("does not open when typing 'a' into another text field", async () => {
+    const user = userEvent.setup();
     render(<CommandWithShortcuts />);
+
     const field = document.createElement("input");
     document.body.appendChild(field);
 
-    const user = userEvent.setup();
     await user.type(field, "a");
 
     expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
@@ -42,13 +43,20 @@ describe("CommandWithShortcuts", () => {
     render(<CommandWithShortcuts />);
 
     await user.keyboard("a");
-
     const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
     input.focus();
 
     await user.keyboard("a");
     expect(screen.getByPlaceholderText("Type a command or search...")).toBeDefined();
     expect(input.value).toBe("a");
+  });
+  it("closes the command box when pressing Escape", async () => {
+    const user = userEvent.setup();
+    render(<CommandWithShortcuts />);
+
+    await user.keyboard("{Esc}");
+
+    expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
   });
 });
 
