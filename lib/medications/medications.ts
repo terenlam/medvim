@@ -10,3 +10,4 @@ const slugCollator = new Intl.Collator("en", { sensitivity: "base" });
 export const medications: readonly Medication[] = Object.freeze(
   Object.values(medicationModules).sort((a, b) => slugCollator.compare(a.slug, b.slug)),
 );
+
