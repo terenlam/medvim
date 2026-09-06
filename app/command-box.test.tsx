@@ -4,10 +4,24 @@ import userEvent from "@testing-library/user-event";
 import { CommandWithShortcuts } from "./command-box";
 import { medications } from "@/lib/medications/medications";
 
-const { pushMock } = vi.hoisted(() => ({ pushMock: vi.fn() }));
+const { pushMock, medicationsMock } = vi.hoisted(() => ({
+  pushMock: vi.fn(),
+  medicationsMock: [
+    { slug: "bench", name: "Bench" },
+    { slug: "boots", name: "Boots" },
+    { slug: "corner", name: "Corner" },
+    { slug: "donor", name: "Donor" },
+    { slug: "foster", name: "Foster" },
+    { slug: "gospel", name: "Gospel" },
+  ],
+}));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: pushMock }),
+}));
+
+vi.mock("@/lib/medications/medications", () => ({
+  medications: medicationsMock,
 }));
 
 const visibleMedications = medications.slice(0, 5);
@@ -98,7 +112,7 @@ describe("CommandWithShortcuts medications", () => {
     render(<CommandWithShortcuts />);
 
     await user.keyboard("a");
-    await user.type(screen.getByPlaceholderText("Type a command or search..."), "a");
+    await user.type(screen.getByPlaceholderText("Type a command or search..."), "o");
 
     expect(screen.getAllByRole("option").length).toBeLessThanOrEqual(5);
   });
@@ -108,7 +122,7 @@ describe("CommandWithShortcuts medications", () => {
     render(<CommandWithShortcuts />);
 
     await user.keyboard("a");
-    await user.type(screen.getByPlaceholderText("Type a command or search..."), "warf");
+    await user.type(screen.getByPlaceholderText("Type a command or search..."), "gospel");
 
     expect(screen.getByText(hiddenMedication.name)).toBeDefined();
     expect(screen.queryByText(visibleMedications[0].name)).toBeNull();
@@ -119,13 +133,13 @@ describe("CommandWithShortcuts medications", () => {
     render(<CommandWithShortcuts />);
 
     await user.keyboard("a");
-    await user.type(screen.getByPlaceholderText("Type a command or search..."), "a");
+    await user.type(screen.getByPlaceholderText("Type a command or search..."), "o");
 
-    const rivaroxaban = screen.getByRole("option", { name: /Rivaroxaban/i });
-    expect(rivaroxaban.textContent).toContain("Alt + 4");
+    const boots = screen.getByRole("option", { name: /Boots/i });
+    expect(boots.textContent).toContain("Alt + 1");
 
-    const warfarin = screen.getByRole("option", { name: /Warfarin/i });
-    expect(warfarin.textContent).toContain("Alt + 5");
+    const gospel = screen.getByRole("option", { name: /Gospel/i });
+    expect(gospel.textContent).toContain("Alt + 5");
   });
 
   it("navigates to the medication at the filtered position with Alt+n", async () => {
@@ -133,10 +147,10 @@ describe("CommandWithShortcuts medications", () => {
     render(<CommandWithShortcuts />);
 
     await user.keyboard("a");
-    await user.type(screen.getByPlaceholderText("Type a command or search..."), "a");
+    await user.type(screen.getByPlaceholderText("Type a command or search..."), "o");
     await user.keyboard("{Alt>}5{/Alt}");
 
-    expect(pushMock).toHaveBeenCalledWith("/warfarin");
+    expect(pushMock).toHaveBeenCalledWith("/gospel");
   });
 
   it("navigates to a hidden medication when selecting it from search", async () => {
@@ -144,7 +158,7 @@ describe("CommandWithShortcuts medications", () => {
     render(<CommandWithShortcuts />);
 
     await user.keyboard("a");
-    await user.type(screen.getByPlaceholderText("Type a command or search..."), "warf");
+    await user.type(screen.getByPlaceholderText("Type a command or search..."), "gospel");
     await user.click(screen.getByText(hiddenMedication.name));
 
     expect(pushMock).toHaveBeenCalledWith(`/${hiddenMedication.slug}`);
