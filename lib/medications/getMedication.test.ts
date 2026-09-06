@@ -1,17 +1,23 @@
 import { medications } from "./medications";
 import { getMedication } from "./getMedication";
 
+const { medicationsMock } = vi.hoisted(() => ({
+  medicationsMock: [
+    { slug: "alpha", name: "Alpha" },
+    { slug: "bravo", name: "Bravo" },
+  ],
+}));
+
+vi.mock("./medications", () => ({ medications: medicationsMock }));
+
 describe("getMedication", () => {
   it("returns the medication for an existing slug", () => {
-    expect(getMedication("acetaminophen")).toEqual({
-      slug: "acetaminophen",
-      name: "Acetaminophen",
-    });
+    expect(getMedication(medicationsMock[0].slug)).toEqual(medicationsMock[0]);
   });
 
   it("matches on slug, not display name", () => {
-    expect(getMedication("Acetaminophen")).toBeUndefined();
-    expect(getMedication("acetaminophen")).toBeDefined();
+    expect(getMedication(medicationsMock[0].name)).toBeUndefined();
+    expect(getMedication(medicationsMock[0].slug)).toBeDefined();
   });
 
   it("returns undefined for an unknown slug", () => {
@@ -32,3 +38,4 @@ describe("getMedication", () => {
     }
   });
 });
+
