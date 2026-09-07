@@ -92,8 +92,10 @@ describe("CommandWithShortcuts medications", () => {
     await user.keyboard("a");
 
     visibleMedications.forEach((medication, index) => {
-      expect(screen.getByText(medication.name)).toBeDefined();
-      expect(screen.getByText(`Alt + ${index + 1}`)).toBeDefined();
+      const option = screen.getByRole("option", {
+        name: new RegExp(medication.name),
+      });
+      expect(option.textContent).toContain(`Alt + ${index + 1}`);
     });
   });
 
@@ -183,4 +185,48 @@ describe("CommandWithShortcuts medications", () => {
 
     expect(pushMock).toHaveBeenCalledWith(`/${visibleMedications[0].slug}`);
   });
+
+  it("shows the Ctrl+J and Ctrl+K navigation keybindings", async () => {
+    const user = userEvent.setup();
+    render(<CommandWithShortcuts />);
+
+    await user.keyboard("a");
+
+    expect(screen.getByText("J")).toBeDefined();
+    expect(screen.getByText("K")).toBeDefined();
+  });
+
+  it("moves to the next medication with Ctrl+J", async () => {
+    const user = userEvent.setup();
+    render(<CommandWithShortcuts />);
+
+    await user.keyboard("a");
+    const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
+    input.focus();
+
+    await user.keyboard("{Control>}j{/Control}");
+
+    const boots = screen.getByRole("option", { name: /Boots/i });
+    expect(boots.getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("moves to the previous medication with Ctrl+K", async () => {
+    const user = userEvent.setup();
+    render(<CommandWithShortcuts />);
+
+    await user.keyboard("a");
+    const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
+    input.focus();
+
+    await user.keyboard("{Control>}j{/Control}");
+    expect(screen.getByRole("option", { name: /Boots/i }).getAttribute("aria-selected")).toBe(
+      "true",
+    );
+
+    await user.keyboard("{Control>}k{/Control}");
+
+    const bench = screen.getByRole("option", { name: /Bench/i });
+    expect(bench.getAttribute("aria-selected")).toBe("true");
+  });
 });
+
