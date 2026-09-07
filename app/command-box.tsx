@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/command";
 import { medications } from "@/lib/medications/medications";
 
-import { Kbd } from "@/components/ui/kbd";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 
 const MAX_ITEMS = 5;
 
@@ -67,7 +67,7 @@ function MedicationCommandList({
         >
           <span>{medication.name}</span>
           <CommandShortcut>
-            <Kbd>Alt + {index + 1}</Kbd>
+            <Kbd>Alt</Kbd> + <Kbd>{index + 1}</Kbd>
           </CommandShortcut>
         </CommandItem>
       ))}
@@ -107,11 +107,33 @@ export function CommandWithShortcuts() {
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <Command shouldFilter={false}>
+      <Command shouldFilter={false} loop>
         <CommandInput placeholder="Type a command or search..." autoFocus />
         <CommandList>
           <MedicationCommandList open={open} onSelect={openMedication} />
         </CommandList>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t px-2 py-1.5 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1">
+            <KbdGroup>
+              <Kbd>Ctrl</Kbd>
+              <span>+</span>
+              <Kbd>J</Kbd>
+            </KbdGroup>
+            <span>next</span>
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <KbdGroup>
+              <Kbd>Ctrl</Kbd>
+              <span>+</span>
+              <Kbd>K</Kbd>
+            </KbdGroup>
+            <span>prev</span>
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Kbd>Enter</Kbd>
+            <span>open</span>
+          </span>
+        </div>
       </Command>
     </CommandDialog>
   );
