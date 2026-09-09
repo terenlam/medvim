@@ -31,6 +31,7 @@ export default async function Page({ params }: PageProps<"/[slug]">) {
     <main className="flex min-h-[75vh] items-center justify-center">
       <div className="flex flex-col items-center">
         <h1 className="text-2xl">{medication.name}</h1>
+        <p className="whitespace-pre-line">{medication.summary}</p>
       </div>
     </main>
   );

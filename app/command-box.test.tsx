@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AppShell } from "./app-shell";
 import { medications } from "@/lib/medications/medications";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const { pushMock, medicationsMock } = vi.hoisted(() => ({
   pushMock: vi.fn(),
@@ -24,6 +25,10 @@ vi.mock("@/lib/medications/medications", () => ({
   medications: medicationsMock,
 }));
 
+vi.mock("@/hooks/use-mobile", () => ({
+  useIsMobile: vi.fn(),
+}));
+
 const visibleMedications = medications.slice(0, 5);
 const hiddenMedication = medications[5];
 
@@ -31,6 +36,25 @@ const searchPlaceholder = "Type a command or search...";
 
 function openSearch(user: ReturnType<typeof userEvent.setup>) {
   return user.keyboard("s");
+}
+
+async function renderWithMedications(...slugs: string[]) {
+  const user = userEvent.setup();
+  render(<AppShell>content</AppShell>);
+
+  await user.keyboard("a");
+
+  for (const slug of slugs) {
+    const medication = medications.find(({ slug: candidate }) => candidate === slug);
+    if (medication?.slug === "gospel") {
+      const input = screen.getByPlaceholderText("Type a medication name...") as HTMLInputElement;
+      await user.type(input, "gospel");
+    }
+    await user.click(screen.getByText(medication!.name));
+  }
+
+  await user.keyboard("{Escape}");
+  return user;
 }
 
 describe("AppShell command boxes", () => {
@@ -266,25 +290,6 @@ describe("add medication command box", () => {
 });
 
 describe("medication sidebar", () => {
-  async function renderWithMedications(...slugs: string[]) {
-    const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
-
-    await user.keyboard("a");
-
-    for (const slug of slugs) {
-      const medication = medications.find(({ slug: candidate }) => candidate === slug);
-      if (medication?.slug === "gospel") {
-        const input = screen.getByPlaceholderText("Type a medication name...") as HTMLInputElement;
-        await user.type(input, "gospel");
-      }
-      await user.click(screen.getByText(medication!.name));
-    }
-
-    await user.keyboard("{Escape}");
-    return user;
-  }
-
   it("gives the sidebar keyboard focus after the add command box closes", async () => {
     await renderWithMedications("boots", "corner");
 
@@ -320,6 +325,25 @@ describe("medication sidebar", () => {
     await user.keyboard("j");
     await user.keyboard("j");
     expect(screen.getByRole("link", { name: "Corner" }).getAttribute("aria-current")).toBe("true");
+  });
+
+  it("scrolls the selected medication into view with 'j' and 'k'", async () => {
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(Element.prototype, "scrollIntoView", {
+      configurable: true,
+      writable: true,
+      value: scrollIntoView,
+    });
+
+    const user = await renderWithMedications("boots", "corner", "donor");
+    scrollIntoView.mockClear();
+
+    await user.keyboard("j");
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+
+    scrollIntoView.mockClear();
+    await user.keyboard("k");
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
   });
 
   it("navigates to the selected medication page on Enter", async () => {
@@ -380,5 +404,118 @@ describe("medication sidebar", () => {
     await user.click(screen.getByRole("button", { name: "Delete Corner" }));
 
     expect(screen.queryByRole("link", { name: "Corner" })).toBeNull();
+  });
+});
+
+describe("sidebar toggle (Ctrl+B)", () => {
+  beforeEach(() => {
+    pushMock.mockClear();
+    vi.mocked(useIsMobile).mockReset();
+  });
+
+  function stubScrollBy() {
+    const scrollBy = vi.fn();
+    Object.defineProperty(window, "scrollBy", {
+      configurable: true,
+      writable: true,
+      value: scrollBy,
+    });
+    return scrollBy;
+  }
+
+  async function closeSidebar(user: ReturnType<typeof userEvent.setup>) {
+    await user.keyboard("{Control>}b{/Control}");
+  }
+
+  it("shows the Ctrl+B toggle hint in the sidebar footer", async () => {
+    await renderWithMedications("boots");
+
+    expect(screen.getByText("toggle")).toBeDefined();
+  });
+
+  it("closes the sidebar with Ctrl+B and reopens it with Ctrl+B", async () => {
+    const user = await renderWithMedications("boots");
+
+    await closeSidebar(user);
+
+    expect(screen.queryByRole("link", { name: "Boots" })).toBeNull();
+    expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("true");
+
+    await closeSidebar(user);
+
+    expect(screen.getByRole("link", { name: "Boots" })).toBeDefined();
+    expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("false");
+  });
+
+  it("focuses the main content area when the sidebar closes", async () => {
+    const user = await renderWithMedications("boots");
+
+    await closeSidebar(user);
+
+    expect(document.activeElement).toBe(screen.getByTestId("main-content"));
+  });
+
+  it("toggles the sidebar with Ctrl+B at narrow screen sizes", async () => {
+    vi.mocked(useIsMobile).mockReturnValue(true);
+    const user = await renderWithMedications("boots");
+
+    await closeSidebar(user);
+
+    expect(screen.queryByRole("link", { name: "Boots" })).toBeNull();
+    expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("true");
+
+    await closeSidebar(user);
+
+    expect(screen.getByRole("link", { name: "Boots" })).toBeDefined();
+  });
+
+  it("does nothing on 'x' when the sidebar is closed", async () => {
+    const user = await renderWithMedications("boots", "corner");
+
+    await closeSidebar(user);
+    await user.keyboard("x");
+    await closeSidebar(user);
+
+    expect(screen.getByRole("link", { name: "Corner" })).toBeDefined();
+  });
+
+  it("does nothing on Enter when the sidebar is closed", async () => {
+    const user = await renderWithMedications("boots");
+
+    await closeSidebar(user);
+    await user.keyboard("{Enter}");
+
+    expect(pushMock).not.toHaveBeenCalled();
+  });
+
+  it("still opens the add command box with 'a' when the sidebar is closed", async () => {
+    const user = await renderWithMedications("boots");
+
+    await closeSidebar(user);
+    await user.keyboard("a");
+
+    expect(screen.getByPlaceholderText("Type a medication name...")).toBeDefined();
+  });
+
+  it("scrolls the main content with 'j' and 'k' when the sidebar is closed", async () => {
+    const scrollBy = stubScrollBy();
+    const user = await renderWithMedications("boots");
+
+    await closeSidebar(user);
+    await user.keyboard("j");
+    expect(scrollBy).toHaveBeenCalledWith(0, 32);
+
+    await user.keyboard("k");
+    expect(scrollBy).toHaveBeenCalledWith(0, -32);
+  });
+
+  it("does not scroll the main content with 'j' and 'k' when the sidebar is open", async () => {
+    const scrollBy = stubScrollBy();
+    const user = await renderWithMedications("boots");
+
+    await user.keyboard("j");
+    await user.keyboard("k");
+
+    expect(scrollBy).not.toHaveBeenCalled();
   });
 });

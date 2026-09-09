@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { XIcon } from "lucide-react";
@@ -29,7 +29,12 @@ export interface MedicationSidebarProps {
 export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarProps) {
   const { added, removeMedication } = useAddedMedications();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    itemRefs.current[selectedIndex]?.scrollIntoView({ block: "nearest" });
+  }, [selectedIndex]);
 
   useEffect(() => {
     if (!active) return;
@@ -109,7 +114,12 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
                 {added.map((medication, index) => {
                   const selected = index === selectedIndex;
                   return (
-                    <SidebarMenuItem key={medication.slug}>
+                    <SidebarMenuItem
+                      key={medication.slug}
+                      ref={(el) => {
+                        itemRefs.current[index] = el;
+                      }}
+                    >
                       <SidebarMenuButton
                         render={<Link href={`/${medication.slug}`} />}
                         isActive={selected}
@@ -151,6 +161,13 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
           <span className="inline-flex items-center gap-1">
             <Kbd>x</Kbd>
             <span>remove</span>
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <KbdGroup>
+              <Kbd>Ctrl</Kbd>
+              <Kbd>B</Kbd>
+            </KbdGroup>
+            <span>toggle</span>
           </span>
         </div>
       </SidebarFooter>
