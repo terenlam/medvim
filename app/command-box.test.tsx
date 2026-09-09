@@ -33,28 +33,28 @@ describe("CommandWithShortcuts", () => {
     expect(screen.queryByRole("button", { name: "Open Menu" })).toBeNull();
   });
 
-  it("does not open the command box when 'a' is not pressed in normal mode", () => {
+  it("does not open the command box when 's' is not pressed in normal mode", () => {
     render(<CommandWithShortcuts />);
     expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
   });
 
-  it("opens the command box when pressing 'a' in normal mode", async () => {
+  it("opens the command box when pressing 's' in normal mode", async () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
 
     expect(screen.getByPlaceholderText("Type a command or search...")).toBeDefined();
   });
 
-  it("does not open when typing 'a' into another text field", async () => {
+  it("does not open when typing 's' into another text field", async () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
     const field = document.createElement("input");
     document.body.appendChild(field);
 
-    await user.type(field, "a");
+    await user.type(field, "s");
 
     expect(screen.queryByPlaceholderText("Type a command or search...")).toBeNull();
     onTestFinished(() => {
@@ -62,17 +62,17 @@ describe("CommandWithShortcuts", () => {
     });
   });
 
-  it("types 'a' into the input instead of reopening when open", async () => {
+  it("types 's' into the input instead of reopening when open", async () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
     input.focus();
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     expect(screen.getByPlaceholderText("Type a command or search...")).toBeDefined();
-    expect(input.value).toBe("a");
+    expect(input.value).toBe("s");
   });
   it("closes the command box when pressing Escape", async () => {
     const user = userEvent.setup();
@@ -89,7 +89,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
 
     visibleMedications.forEach((medication, index) => {
       const option = screen.getByRole("option", {
@@ -103,7 +103,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
 
     expect(screen.getByText(visibleMedications[4].name)).toBeDefined();
     expect(screen.queryByText(hiddenMedication.name)).toBeNull();
@@ -113,7 +113,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     await user.type(screen.getByPlaceholderText("Type a command or search..."), "o");
 
     expect(screen.getAllByRole("option").length).toBeLessThanOrEqual(5);
@@ -123,7 +123,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     await user.type(screen.getByPlaceholderText("Type a command or search..."), "gospel");
 
     expect(screen.getByText(hiddenMedication.name)).toBeDefined();
@@ -134,7 +134,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     await user.type(screen.getByPlaceholderText("Type a command or search..."), "o");
 
     const boots = screen.getByRole("option", { name: /Boots/i });
@@ -148,7 +148,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     await user.type(screen.getByPlaceholderText("Type a command or search..."), "o");
     await user.keyboard("{Alt>}5{/Alt}");
 
@@ -159,7 +159,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     await user.type(screen.getByPlaceholderText("Type a command or search..."), "gospel");
     await user.click(screen.getByText(hiddenMedication.name));
 
@@ -170,7 +170,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     await user.click(screen.getByText(visibleMedications[0].name));
 
     expect(pushMock).toHaveBeenCalledWith(`/${visibleMedications[0].slug}`);
@@ -180,7 +180,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     await user.keyboard("{Alt>}1{/Alt}");
 
     expect(pushMock).toHaveBeenCalledWith(`/${visibleMedications[0].slug}`);
@@ -190,7 +190,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
 
     expect(screen.getByText("J")).toBeDefined();
     expect(screen.getByText("K")).toBeDefined();
@@ -200,7 +200,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
     input.focus();
 
@@ -214,7 +214,7 @@ describe("CommandWithShortcuts medications", () => {
     const user = userEvent.setup();
     render(<CommandWithShortcuts />);
 
-    await user.keyboard("a");
+    await user.keyboard("s");
     const input = screen.getByPlaceholderText("Type a command or search...") as HTMLInputElement;
     input.focus();
 

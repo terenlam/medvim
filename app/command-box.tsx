@@ -88,7 +88,7 @@ export function CommandWithShortcuts() {
     if (open) return;
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "a" && !event.metaKey && !event.ctrlKey && !event.altKey) {
+      if (event.key === "s" && !event.metaKey && !event.ctrlKey && !event.altKey) {
         const target = event.target as HTMLElement | null;
         const isTyping =
           target?.tagName === "INPUT" ||
