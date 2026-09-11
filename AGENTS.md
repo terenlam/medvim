@@ -49,6 +49,7 @@ Medvim is a modern clinical tool targeting health care professionals. We priorit
 - React Compiler is enabled (`next.config.ts`: `reactCompiler: true`) — rely on the compiler, do not hand-add memoization.
 - Tailwind CSS **v4**: configuration is CSS-first in `app/globals.css` (`@import "tailwindcss"`, `@theme inline`, dark variant via `.dark`). There is **no `tailwind.config`** — add theme tokens there, not in a config file.
 - shadcn uses style **`base-nova`** backed by **`@base-ui/react`** primitives (not Radix). E.g. `components/ui/button.tsx` wraps `@base-ui/react/button`. Icons: lucide-react.
+- React Compiler is enabled. Do not manually memoize components with `useMemo`, `useCallback`, and `React.memo`.
 
 ## Testing (vitest + jsdom + testing-library)
 
