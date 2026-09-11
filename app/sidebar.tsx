@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { XIcon } from "lucide-react";
 
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import {
@@ -15,7 +14,6 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
@@ -127,12 +125,6 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
                       >
                         <span>{medication.name}</span>
                       </SidebarMenuButton>
-                      <SidebarMenuAction
-                        aria-label={`Delete ${medication.name}`}
-                        onClick={() => removeMedication(medication.slug)}
-                      >
-                        <XIcon />
-                      </SidebarMenuAction>
                     </SidebarMenuItem>
                   );
                 })}
@@ -174,3 +166,4 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
     </Sidebar>
   );
 }
+

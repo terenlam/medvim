@@ -243,8 +243,16 @@ describe("add medication command box", () => {
     await user.keyboard("a");
     await user.click(screen.getByText(visibleMedications[0].name));
 
-    expect(screen.queryByRole("option", { name: new RegExp(visibleMedications[0].name) })).toBeNull();
-    expect(screen.getByRole("option", { name: new RegExp(visibleMedications[1].name) })).toBeDefined();
+    expect(
+      screen.queryByRole("option", {
+        name: new RegExp(visibleMedications[0].name),
+      }),
+    ).toBeNull();
+    expect(
+      screen.getByRole("option", {
+        name: new RegExp(visibleMedications[1].name),
+      }),
+    ).toBeDefined();
   });
 
   it("clears the search after adding a medication", async () => {
@@ -397,14 +405,6 @@ describe("medication sidebar", () => {
 
     expect(screen.getByPlaceholderText(searchPlaceholder)).toBeDefined();
   });
-
-  it("deletes a medication through its action button", async () => {
-    const user = await renderWithMedications("boots", "corner");
-
-    await user.click(screen.getByRole("button", { name: "Delete Corner" }));
-
-    expect(screen.queryByRole("link", { name: "Corner" })).toBeNull();
-  });
 });
 
 describe("sidebar toggle (Ctrl+B)", () => {
@@ -519,3 +519,4 @@ describe("sidebar toggle (Ctrl+B)", () => {
     expect(scrollBy).not.toHaveBeenCalled();
   });
 });
+
