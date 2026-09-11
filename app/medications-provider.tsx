@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import type { Medication } from "@/lib/medications/type";
 
 interface AddedMedicationsContextValue {
@@ -15,27 +15,20 @@ const AddedMedicationsContext = createContext<AddedMedicationsContextValue | nul
 export function AddedMedicationsProvider({ children }: { children: React.ReactNode }) {
   const [added, setAdded] = useState<Medication[]>([]);
 
-  const value = useMemo<AddedMedicationsContextValue>(
-    () => ({
-      added,
-      addMedication: (medication) => {
-        setAdded((current) =>
-          current.some((item) => item.slug === medication.slug)
-            ? current
-            : [...current, medication],
-        );
-      },
-      removeMedication: (slug) => {
-        setAdded((current) => current.filter((medication) => medication.slug !== slug));
-      },
-      isAdded: (slug) => added.some((medication) => medication.slug === slug),
-    }),
-    [added],
-  );
+  const value: AddedMedicationsContextValue = {
+    added,
+    addMedication: (medication) => {
+      setAdded((current) =>
+        current.some((item) => item.slug === medication.slug) ? current : [...current, medication],
+      );
+    },
+    removeMedication: (slug) => {
+      setAdded((current) => current.filter((medication) => medication.slug !== slug));
+    },
+    isAdded: (slug) => added.some((medication) => medication.slug === slug),
+  };
 
-  return (
-    <AddedMedicationsContext.Provider value={value}>{children}</AddedMedicationsContext.Provider>
-  );
+  return <AddedMedicationsContext value={value}>{children}</AddedMedicationsContext>;
 }
 
 export function useAddedMedications() {
@@ -45,3 +38,4 @@ export function useAddedMedications() {
   }
   return context;
 }
+
