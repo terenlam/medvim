@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { AddMedicationCommand, CommandWithShortcuts } from "./command-box";
+import { AddMedicationCommand, SearchMedicationCommand } from "./command-box";
 import { AddedMedicationsProvider } from "./medications-provider";
 import { MedicationSidebar } from "./sidebar";
 
@@ -93,7 +93,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       >
         {children}
       </div>
-      <CommandWithShortcuts
+      <SearchMedicationCommand
         open={dialog === "search"}
         onOpenChange={(open) => setDialog(open ? "search" : null)}
       />
@@ -104,4 +104,3 @@ function Shell({ children }: { children: React.ReactNode }) {
     </>
   );
 }
-

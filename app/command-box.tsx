@@ -35,9 +35,7 @@ function MedicationCommandList({
   const search = useCommandState((state) => state.search);
 
   const visible = medications
-    .filter(
-      ({ name, slug }) => defaultFilter(name, search) > 0 && !excludeSlugs?.has(slug),
-    )
+    .filter(({ name, slug }) => defaultFilter(name, search) > 0 && !excludeSlugs?.has(slug))
     .slice(0, MAX_ITEMS);
 
   useEffect(() => {
@@ -111,7 +109,7 @@ function FooterHints() {
   );
 }
 
-export function CommandWithShortcuts({
+export function SearchMedicationCommand({
   open,
   onOpenChange,
 }: {
@@ -185,3 +183,4 @@ export function AddMedicationCommand({
     </CommandDialog>
   );
 }
+
