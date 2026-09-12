@@ -4,26 +4,41 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-describe("sidebar toggle (Ctrl+B)", () => {
-  beforeEach(() => {
+const it = test
+  .extend("resetMockState", { auto: true }, () => {
     pushMock.mockClear();
     vi.mocked(useIsMobile).mockReset();
-  });
-
-  function stubScrollBy() {
+  })
+  .extend("scrollBy", async ({}, { onCleanup }) => {
     const scrollBy = vi.fn();
     Object.defineProperty(window, "scrollBy", {
       configurable: true,
       writable: true,
       value: scrollBy,
     });
+    onCleanup(() => {
+      Reflect.deleteProperty(window, "scrollBy");
+    });
     return scrollBy;
-  }
+  })
+  .extend("scrollTo", async ({}, { onCleanup }) => {
+    const scrollTo = vi.fn();
+    Object.defineProperty(window, "scrollTo", {
+      configurable: true,
+      writable: true,
+      value: scrollTo,
+    });
+    onCleanup(() => {
+      Reflect.deleteProperty(window, "scrollTo");
+    });
+    return scrollTo;
+  });
 
-  async function toggleSidebar(user: ReturnType<typeof userEvent.setup>) {
-    await user.keyboard("{Control>}b{/Control}");
-  }
+async function toggleSidebar(user: ReturnType<typeof userEvent.setup>) {
+  await user.keyboard("{Control>}b{/Control}");
+}
 
+describe("sidebar toggle (Ctrl+B)", () => {
   it("shows the Ctrl+B toggle hint in the sidebar footer", async () => {
     await renderWithMedications("boots");
 
@@ -94,8 +109,9 @@ describe("sidebar toggle (Ctrl+B)", () => {
     expect(screen.getByPlaceholderText("Type a medication name...")).toBeDefined();
   });
 
-  it("scrolls the main content with 'j' and 'k' when the sidebar is closed", async () => {
-    const scrollBy = stubScrollBy();
+  it("scrolls the main content with 'j' and 'k' when the sidebar is closed", async ({
+    scrollBy,
+  }) => {
     const user = await renderWithMedications("boots");
 
     await toggleSidebar(user);
@@ -106,8 +122,9 @@ describe("sidebar toggle (Ctrl+B)", () => {
     expect(scrollBy).toHaveBeenCalledWith(0, -32);
   });
 
-  it("does not scroll the main content with 'j' and 'k' when the sidebar is open", async () => {
-    const scrollBy = stubScrollBy();
+  it("does not scroll the main content with 'j' and 'k' when the sidebar is open", async ({
+    scrollBy,
+  }) => {
     const user = await renderWithMedications("boots");
 
     await user.keyboard("j");
@@ -115,4 +132,38 @@ describe("sidebar toggle (Ctrl+B)", () => {
 
     expect(scrollBy).not.toHaveBeenCalled();
   });
+
+  it("scrolls the main content to the top with 'gg' when the sidebar is closed", async ({
+    scrollTo,
+  }) => {
+    const user = await renderWithMedications("boots");
+
+    await toggleSidebar(user);
+    await user.keyboard("gg");
+
+    expect(scrollTo).toHaveBeenCalledWith(0, 0);
+  });
+
+  it("scrolls the main content to the bottom with 'G' when the sidebar is closed", async ({
+    scrollTo,
+  }) => {
+    const user = await renderWithMedications("boots");
+
+    await toggleSidebar(user);
+    await user.keyboard("G");
+
+    expect(scrollTo).toHaveBeenCalledWith(0, document.documentElement.scrollHeight);
+  });
+
+  it("does not scroll the main content with 'gg' and 'G' when the sidebar is open", async ({
+    scrollTo,
+  }) => {
+    const user = await renderWithMedications("boots");
+
+    await user.keyboard("gg");
+    await user.keyboard("G");
+
+    expect(scrollTo).not.toHaveBeenCalled();
+  });
 });
+
