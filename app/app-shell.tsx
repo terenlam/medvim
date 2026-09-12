@@ -79,7 +79,7 @@ function Shell({ children }: { children: React.ReactNode }) {
         aria-hidden={!open}
         inert={!open}
         className={cn(
-          "sticky top-0 self-start h-svh overflow-hidden transition-[width] duration-200 ease-linear",
+          "sticky top-0 self-start h-svh overflow-hidden transition-[width] duration-100 ease-linear",
           open ? "w-(--sidebar-width)" : "w-0",
         )}
       >
