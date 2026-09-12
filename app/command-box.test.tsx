@@ -437,7 +437,7 @@ describe("sidebar toggle (Ctrl+B)", () => {
     return scrollBy;
   }
 
-  async function closeSidebar(user: ReturnType<typeof userEvent.setup>) {
+  async function toggleSidebar(user: ReturnType<typeof userEvent.setup>) {
     await user.keyboard("{Control>}b{/Control}");
   }
 
@@ -450,12 +450,12 @@ describe("sidebar toggle (Ctrl+B)", () => {
   it("closes the sidebar with Ctrl+B and reopens it with Ctrl+B", async () => {
     const user = await renderWithMedications("boots");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
 
     expect(screen.queryByRole("link", { name: "Boots" })).toBeNull();
     expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("true");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
 
     expect(screen.getByRole("link", { name: "Boots" })).toBeDefined();
     expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("false");
@@ -464,7 +464,7 @@ describe("sidebar toggle (Ctrl+B)", () => {
   it("focuses the main content area when the sidebar closes", async () => {
     const user = await renderWithMedications("boots");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
 
     expect(document.activeElement).toBe(screen.getByTestId("main-content"));
   });
@@ -473,12 +473,12 @@ describe("sidebar toggle (Ctrl+B)", () => {
     vi.mocked(useIsMobile).mockReturnValue(true);
     const user = await renderWithMedications("boots");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
 
     expect(screen.queryByRole("link", { name: "Boots" })).toBeNull();
     expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("true");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
 
     expect(screen.getByRole("link", { name: "Boots" })).toBeDefined();
   });
@@ -486,9 +486,9 @@ describe("sidebar toggle (Ctrl+B)", () => {
   it("does nothing on 'x' when the sidebar is closed", async () => {
     const user = await renderWithMedications("boots", "corner");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
     await user.keyboard("x");
-    await closeSidebar(user);
+    await toggleSidebar(user);
 
     expect(screen.getByRole("link", { name: "Corner" })).toBeDefined();
   });
@@ -496,7 +496,7 @@ describe("sidebar toggle (Ctrl+B)", () => {
   it("does nothing on Enter when the sidebar is closed", async () => {
     const user = await renderWithMedications("boots");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
     await user.keyboard("{Enter}");
 
     expect(pushMock).not.toHaveBeenCalled();
@@ -505,7 +505,7 @@ describe("sidebar toggle (Ctrl+B)", () => {
   it("still opens the add command box with 'a' when the sidebar is closed", async () => {
     const user = await renderWithMedications("boots");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
     await user.keyboard("a");
 
     expect(screen.getByPlaceholderText("Type a medication name...")).toBeDefined();
@@ -515,7 +515,7 @@ describe("sidebar toggle (Ctrl+B)", () => {
     const scrollBy = stubScrollBy();
     const user = await renderWithMedications("boots");
 
-    await closeSidebar(user);
+    await toggleSidebar(user);
     await user.keyboard("j");
     expect(scrollBy).toHaveBeenCalledWith(0, 32);
 
