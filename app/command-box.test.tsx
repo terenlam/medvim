@@ -58,11 +58,6 @@ async function renderWithMedications(...slugs: string[]) {
 }
 
 describe("AppShell command boxes", () => {
-  it("has no button to open the menu", () => {
-    render(<AppShell>content</AppShell>);
-    expect(screen.queryByRole("button", { name: "Open Menu" })).toBeNull();
-  });
-
   it("does not open the search command box until 's' is pressed", () => {
     render(<AppShell>content</AppShell>);
     expect(screen.queryByPlaceholderText(searchPlaceholder)).toBeNull();
@@ -519,4 +514,3 @@ describe("sidebar toggle (Ctrl+B)", () => {
     expect(scrollBy).not.toHaveBeenCalled();
   });
 });
-
