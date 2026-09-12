@@ -182,6 +182,21 @@ describe("search command box", () => {
     expect(boots.getAttribute("aria-selected")).toBe("true");
   });
 
+  it("moves to the previous medication with Ctrl+K", async () => {
+    const user = userEvent.setup();
+    render(<AppShell>content</AppShell>);
+
+    await openSearch(user);
+    const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
+    input.focus();
+
+    await user.keyboard("{Control>}j{/Control}");
+    await user.keyboard("{Control>}k{/Control}");
+
+    const bench = screen.getByRole("option", { name: /Bench/i });
+    expect(bench.getAttribute("aria-selected")).toBe("true");
+  });
+
   it("shows the Ctrl+J and Ctrl+K navigation keybindings", async () => {
     const user = userEvent.setup();
     render(<AppShell>content</AppShell>);
