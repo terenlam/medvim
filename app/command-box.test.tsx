@@ -203,8 +203,12 @@ describe("search command box", () => {
 
     await openSearch(user);
 
-    expect(screen.getByText("J")).toBeDefined();
-    expect(screen.getByText("K")).toBeDefined();
+    expect(screen.getByText("J").closest("[data-slot='kbd-group']")?.textContent).toContain(
+      "Ctrl+J",
+    );
+    expect(screen.getByText("K").closest("[data-slot='kbd-group']")?.textContent).toContain(
+      "Ctrl+K",
+    );
   });
 });
 
