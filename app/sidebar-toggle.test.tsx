@@ -59,6 +59,21 @@ describe("sidebar toggle (Ctrl+B)", () => {
     expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("false");
   });
 
+  it("does not toggle the sidebar when Ctrl+B is typed inside an input", async () => {
+    const user = await renderWithMedications("boots");
+
+    await user.keyboard("s");
+    const input = screen.getByPlaceholderText(
+      "Type a command or search...",
+    ) as HTMLInputElement;
+    await user.type(input, "minims");
+    await user.keyboard("{Control>}b{/Control}");
+
+    expect(input.value).toBe("minims");
+    expect(input.selectionStart).toBe(5);
+    expect(screen.getByTestId("sidebar-wrapper").getAttribute("aria-hidden")).toBe("false");
+  });
+
   it("focuses the main content area when the sidebar closes", async () => {
     const user = await renderWithMedications("boots");
 

@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "@/components/ui/input-group"
+import { handleEditingShortcut } from "@/lib/edit-shortcuts"
 import { SearchIcon, CheckIcon } from "lucide-react"
 
 function Command({
@@ -68,13 +69,20 @@ function CommandDialog({
 
 function CommandInput({
   className,
+  onKeyDown,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    handleEditingShortcut(event.currentTarget, event.nativeEvent)
+    onKeyDown?.(event)
+  }
+
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
         <CommandPrimitive.Input
           data-slot="command-input"
+          onKeyDown={handleKeyDown}
           className={cn(
             "w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
             className
