@@ -18,6 +18,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useAddedMedications } from "./medications-provider";
+import { useGotoKeys } from "@/hooks/use-goto-keys";
 
 export interface MedicationSidebarProps {
   active: boolean;
@@ -29,6 +30,11 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
   const [selectedIndex, setSelectedIndex] = useState(0);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const router = useRouter();
+
+  const gotoKeyDown = useGotoKeys(active, (target) => {
+    if (added.length === 0) return;
+    setSelectedIndex(target === "top" ? 0 : added.length - 1);
+  });
 
   useEffect(() => {
     itemRefs.current[selectedIndex]?.scrollIntoView({ block: "nearest" });
@@ -44,6 +50,8 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
       const isTyping =
         target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable;
       if (isTyping) return;
+
+      if (gotoKeyDown(event)) return;
 
       if (event.key === "a") {
         event.preventDefault();
@@ -92,7 +100,7 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [active, added, selectedIndex, router, onOpenDialog, removeMedication]);
+  }, [active, added, selectedIndex, router, onOpenDialog, removeMedication, gotoKeyDown]);
 
   return (
     <Sidebar collapsible="none">
@@ -145,6 +153,14 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
               <Kbd>k</Kbd>
             </KbdGroup>
             <span>move</span>
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Kbd>gg</Kbd>
+            <span>top</span>
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Kbd>G</Kbd>
+            <span>bottom</span>
           </span>
           <span className="inline-flex items-center gap-1">
             <Kbd>Enter</Kbd>

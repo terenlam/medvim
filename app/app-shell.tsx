@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { AddMedicationCommand, SearchMedicationCommand } from "./command-box";
 import { AddedMedicationsProvider } from "./medications-provider";
 import { MedicationSidebar } from "./sidebar";
+import { useGotoKeys } from "@/hooks/use-goto-keys";
 
 export type DialogKind = "add" | "search";
 
@@ -27,6 +28,12 @@ function Shell({ children }: { children: React.ReactNode }) {
   const [dialog, setDialog] = useState<DialogKind | null>(null);
   const mainRef = useRef<HTMLDivElement>(null);
 
+  const gotoKeyDown = useGotoKeys(dialog === null && !open, (target) =>
+    target === "top"
+      ? window.scrollTo(0, 0)
+      : window.scrollTo(0, document.documentElement.scrollHeight),
+  );
+
   useEffect(() => {
     if (!open) {
       mainRef.current?.focus({ preventScroll: true });
@@ -43,6 +50,8 @@ function Shell({ children }: { children: React.ReactNode }) {
       const isTyping =
         target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable;
       if (isTyping) return;
+
+      if (gotoKeyDown(event)) return;
 
       if (event.key === "a") {
         event.preventDefault();
@@ -70,7 +79,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [dialog, open]);
+  }, [dialog, open, gotoKeyDown]);
 
   return (
     <>

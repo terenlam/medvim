@@ -1,10 +1,6 @@
 /** @vitest-environment happy-dom */
 import { screen } from "@testing-library/react";
-import {
-  pushMock,
-  renderWithMedications,
-  searchPlaceholder,
-} from "./command-box.test-utils";
+import { pushMock, renderWithMedications, searchPlaceholder } from "./command-box.test-utils";
 
 describe("medication sidebar", () => {
   it("gives the sidebar keyboard focus after the add command box closes", async () => {
@@ -107,6 +103,61 @@ describe("medication sidebar", () => {
     expect(screen.getByPlaceholderText("Type a medication name...")).toBeDefined();
   });
 
+  it("returns the selection to the first medication with 'gg'", async () => {
+    const user = await renderWithMedications("boots", "corner", "donor");
+
+    await user.keyboard("j");
+    await user.keyboard("gg");
+
+    expect(screen.getByRole("link", { name: "Boots" }).getAttribute("aria-current")).toBe("true");
+  });
+
+  it("moves the selection to the last medication with 'G'", async () => {
+    const user = await renderWithMedications("boots", "corner", "donor");
+
+    await user.keyboard("G");
+
+    expect(screen.getByRole("link", { name: "Donor" }).getAttribute("aria-current")).toBe("true");
+  });
+
+  it("scrolls the selection into view after 'gg' and 'G'", async () => {
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(Element.prototype, "scrollIntoView", {
+      configurable: true,
+      writable: true,
+      value: scrollIntoView,
+    });
+
+    const user = await renderWithMedications("boots", "corner", "donor");
+    scrollIntoView.mockClear();
+
+    await user.keyboard("j");
+    await user.keyboard("gg");
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+
+    scrollIntoView.mockClear();
+    await user.keyboard("G");
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+  });
+
+  it("does nothing with a single 'g' and still moves with 'j' after it", async () => {
+    const user = await renderWithMedications("boots", "corner");
+
+    await user.keyboard("g");
+    await user.keyboard("j");
+
+    expect(screen.getByRole("link", { name: "Corner" }).getAttribute("aria-current")).toBe("true");
+  });
+
+  it("does nothing with 'gg' and 'G' when there are no medications", async () => {
+    const user = await renderWithMedications();
+
+    await user.keyboard("gg");
+    await user.keyboard("G");
+
+    expect(screen.getByText(/Press/)).toBeDefined();
+  });
+
   it("opens the search command box with 's' from the sidebar", async () => {
     const user = await renderWithMedications("boots");
 
@@ -115,3 +166,4 @@ describe("medication sidebar", () => {
     expect(screen.getByPlaceholderText(searchPlaceholder)).toBeDefined();
   });
 });
+
