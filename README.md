@@ -2,11 +2,11 @@
 
 ## Who is Medvim for?
 
-Medvim is for healthcare professionals who manages medications for older adults.
+Medvim is for healthcare professionals who take care of older adults.
 
 ## Why Medvim
 
-Older adults often accumulate complex, sometimes conflicting prescriptions over years of care. The result is polypharmacy, increasing the risk of drug interactions, avoidable side effects, and hospitalizations that rob people of time they'd rather spend elsewhere.
+Older adults often accumulate complex, sometimes conflicting prescriptions over years of care. The resulting polypharmacy increases the risk of drug interactions, avoidable side effects, and hospitalizations that rob people of time they'd rather spend elsewhere.
 
 Medvim seeks to assist clinicians in optimizing pharmacotherapy in older adults so that they can spend more time on what matters most.
 
