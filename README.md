@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Medvim
 
-## Getting Started
+## Who is Medvim for?
 
-First, run the development server:
+Medvim is for healthcare professionals who manages medications for older adults.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Why Medvim
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Older adults often accumulate complex, sometimes conflicting prescriptions over years of care. The result is polypharmacy, increasing the risk of drug interactions, avoidable side effects, and hospitalizations that rob people of time they'd rather spend elsewhere.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Medvim seeks to assist clinicians in optimizing pharmacotherapy in older adults so that they can spend more time on what matters most.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How does Medvim work
 
-## Learn More
+1. Input a patient's current medications into Medvim.
+2. After submitting the list, Medvim analyzes the medications against established criteria for potentially inappropriate medications (PIMs) in older adults.
+3. It then provides recommendations for safer alternatives and structured deprescribing guidance, helping clinicians make informed decisions about medication management.
 
-To learn more about Next.js, take a look at the following resources:
+## How to get started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Press `a` to start adding the patient's medications
+- Type the name of the medication and press `Enter`
+- Repeat to add more medications
+- Press `Ctrl` + `Enter` to open the recommendation page for the current list of medications
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## How to contribute
 
-## Deploy on Vercel
+Contributions from both clinicians and developers are welcome. Please check CONTRIBUTING.md to learn more.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
