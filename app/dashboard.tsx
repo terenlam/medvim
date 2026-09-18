@@ -6,9 +6,8 @@ interface DashboardKey {
 }
 
 const dashboardKeys: DashboardKey[] = [
-  { key: "s", description: "Search a medication" },
-  { key: "h", description: "Help" },
-  { key: "?", description: "About" },
+  { key: "A", description: "About" },
+  { key: "s", description: "Search" },
 ];
 
 const header = "Medvim";
