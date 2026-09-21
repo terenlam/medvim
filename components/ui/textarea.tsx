@@ -2,14 +2,25 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 import { handleEditingShortcut } from "@/lib/edit-shortcuts"
+import {
+  EditingShortcutsDialog,
+  useEditingShortcutsHelp,
+} from "@/components/editing-shortcuts-dialog"
 
 function Textarea({ className, onKeyDown, ...props }: React.ComponentProps<"textarea">) {
+  const { helpOpen, setHelpOpen, handleHelpKeyDown } = useEditingShortcutsHelp()
+
   function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (handleHelpKeyDown(event)) {
+      onKeyDown?.(event)
+      return
+    }
     handleEditingShortcut(event.currentTarget, event.nativeEvent)
     onKeyDown?.(event)
   }
 
   return (
+    <>
     <textarea
       data-slot="textarea"
       onKeyDown={handleKeyDown}
@@ -18,7 +29,9 @@ function Textarea({ className, onKeyDown, ...props }: React.ComponentProps<"text
         className
       )}
       {...props}
-    />
+      />
+      <EditingShortcutsDialog open={helpOpen} onOpenChange={setHelpOpen} />
+    </>
   )
 }
 

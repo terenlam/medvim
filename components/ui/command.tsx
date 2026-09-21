@@ -16,6 +16,10 @@ import {
   InputGroupAddon,
 } from "@/components/ui/input-group"
 import { handleEditingShortcut } from "@/lib/edit-shortcuts"
+import {
+  EditingShortcutsDialog,
+  useEditingShortcutsHelp,
+} from "@/components/editing-shortcuts-dialog"
 import { SearchIcon, CheckIcon } from "lucide-react"
 
 function Command({
@@ -72,28 +76,37 @@ function CommandInput({
   onKeyDown,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
+  const { helpOpen, setHelpOpen, handleHelpKeyDown } = useEditingShortcutsHelp()
+
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (handleHelpKeyDown(event)) {
+      onKeyDown?.(event)
+      return
+    }
     handleEditingShortcut(event.currentTarget, event.nativeEvent)
     onKeyDown?.(event)
   }
 
   return (
-    <div data-slot="command-input-wrapper" className="p-1 pb-0">
-      <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
-        <CommandPrimitive.Input
-          data-slot="command-input"
-          onKeyDown={handleKeyDown}
-          className={cn(
-            "w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
-            className
-          )}
-          {...props}
-        />
-        <InputGroupAddon>
-          <SearchIcon className="size-4 shrink-0 opacity-50" />
-        </InputGroupAddon>
-      </InputGroup>
-    </div>
+    <>
+      <div data-slot="command-input-wrapper" className="p-1 pb-0">
+        <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
+          <CommandPrimitive.Input
+            data-slot="command-input"
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+              className
+            )}
+            {...props}
+          />
+          <InputGroupAddon>
+            <SearchIcon className="size-4 shrink-0 opacity-50" />
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <EditingShortcutsDialog open={helpOpen} onOpenChange={setHelpOpen} />
+    </>
   )
 }
 

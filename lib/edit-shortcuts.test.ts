@@ -1,4 +1,9 @@
-import { handleEditingShortcut, wordEndAfter, wordStartBefore } from "./edit-shortcuts";
+import {
+  handleEditingShortcut,
+  isEditingHelpShortcut,
+  wordEndAfter,
+  wordStartBefore,
+} from "./edit-shortcuts";
 
 function makeInput(value: string, start: number, end = start): HTMLInputElement {
   const element = document.createElement("input");
@@ -16,7 +21,12 @@ function makeTextarea(value: string, start: number, end = start): HTMLTextAreaEl
 
 function press(
   key: string,
-  modifiers: { ctrl?: boolean; alt?: boolean; meta?: boolean } = {},
+  modifiers: {
+    ctrl?: boolean;
+    alt?: boolean;
+    meta?: boolean;
+    shift?: boolean;
+  } = {},
 ): KeyboardEvent {
   return new KeyboardEvent("keydown", {
     key,
@@ -25,6 +35,7 @@ function press(
     ctrlKey: modifiers.ctrl ?? false,
     altKey: modifiers.alt ?? false,
     metaKey: modifiers.meta ?? false,
+    shiftKey: modifiers.shift ?? false,
   });
 }
 
@@ -522,5 +533,33 @@ describe("handleEditingShortcut", () => {
     expect(handleEditingShortcut(element, press("h", { ctrl: true, alt: true }))).toBe(true);
     expect(element.value).toBe("a");
     expect(element.selectionStart).toBe(1);
+  });
+});
+
+describe("isEditingHelpShortcut", () => {
+  it("matches Ctrl+/", () => {
+    expect(isEditingHelpShortcut(press("/", { ctrl: true }))).toBe(true);
+  });
+
+  it("does not match Ctrl+Shift+/ (Ctrl+?)", () => {
+    expect(isEditingHelpShortcut(press("/", { ctrl: true, shift: true }))).toBe(false);
+  });
+
+  it("does not match a bare /", () => {
+    expect(isEditingHelpShortcut(press("/"))).toBe(false);
+  });
+
+  it("does not match Ctrl+Alt+/ or Ctrl+Meta+/", () => {
+    expect(isEditingHelpShortcut(press("/", { ctrl: true, alt: true }))).toBe(false);
+    expect(isEditingHelpShortcut(press("/", { ctrl: true, meta: true }))).toBe(false);
+  });
+
+  it("leaves Ctrl+/ unhandled by the editing shortcuts", () => {
+    const element = makeInput("hello", 5);
+    const event = press("/", { ctrl: true });
+
+    expect(handleEditingShortcut(element, event)).toBe(false);
+    expect(event.defaultPrevented).toBe(false);
+    expect(element.value).toBe("hello");
   });
 });

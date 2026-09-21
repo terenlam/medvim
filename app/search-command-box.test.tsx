@@ -110,60 +110,15 @@ describe("search command box", () => {
     );
   });
 
-  it("shows the Ctrl+A, Ctrl+E, Ctrl+Alt+H and Ctrl+H editing keybindings", async () => {
+  it("shows the Ctrl+/ shortcuts hint in the footer", async () => {
     const user = userEvent.setup();
     render(<AppShell>content</AppShell>);
 
     await openSearch(user);
 
-    expect(screen.getByText("A").closest("[data-slot='kbd-group']")?.textContent).toContain(
-      "Ctrl+A",
+    expect(screen.getByText("/").closest("[data-slot='kbd-group']")?.textContent).toContain(
+      "Ctrl+/",
     );
-    expect(screen.getByText("E").closest("[data-slot='kbd-group']")?.textContent).toContain(
-      "Ctrl+E",
-    );
-
-    const hHints = screen
-      .getAllByText("H")
-      .map((element) => element.closest("[data-slot='kbd-group']")?.textContent);
-    expect(hHints).toContain("Ctrl+Alt+H");
-    expect(hHints).toContain("Ctrl+H");
-  });
-
-  it("shows the Ctrl+B, Ctrl+F, Alt+B and Alt+F movement keybindings", async () => {
-    const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
-
-    await openSearch(user);
-
-    const bHints = screen
-      .getAllByText("B")
-      .map((element) => element.closest("[data-slot='kbd-group']")?.textContent);
-    expect(bHints).toContain("Ctrl+B");
-    expect(bHints).toContain("Alt+B");
-
-    const fHints = screen
-      .getAllByText("F")
-      .map((element) => element.closest("[data-slot='kbd-group']")?.textContent);
-    expect(fHints).toContain("Ctrl+F");
-    expect(fHints).toContain("Alt+F");
-  });
-
-  it("shows the Ctrl+D, Alt+D and Ctrl+U delete keybindings", async () => {
-    const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
-
-    await openSearch(user);
-
-    const dHints = screen
-      .getAllByText("D")
-      .map((element) => element.closest("[data-slot='kbd-group']")?.textContent);
-    expect(dHints).toContain("Ctrl+D");
-    expect(dHints).toContain("Alt+D");
-
-    expect(screen.getByText("U").closest("[data-slot='kbd-group']")?.textContent).toContain(
-      "Ctrl+U",
-    );
+    expect(screen.getByText("shortcuts")).toBeDefined();
   });
 });
-

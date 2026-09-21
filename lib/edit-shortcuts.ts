@@ -1,3 +1,18 @@
+type HelpShortcutEvent = Pick<
+  KeyboardEvent,
+  "key" | "ctrlKey" | "metaKey" | "altKey" | "shiftKey"
+>;
+
+export function isEditingHelpShortcut(event: HelpShortcutEvent): boolean {
+  return (
+    event.key === "/" &&
+    event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey &&
+    !event.shiftKey
+  );
+}
+
 type EditableTextElement = HTMLInputElement | HTMLTextAreaElement;
 
 type Gesture =

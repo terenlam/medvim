@@ -105,91 +105,9 @@ function FooterHints() {
         <KbdGroup>
           <Kbd>Ctrl</Kbd>
           <span>+</span>
-          <Kbd>A</Kbd>
+          <Kbd>/</Kbd>
         </KbdGroup>
-        <span>start</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Ctrl</Kbd>
-          <span>+</span>
-          <Kbd>E</Kbd>
-        </KbdGroup>
-        <span>end</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Ctrl</Kbd>
-          <span>+</span>
-          <Kbd>B</Kbd>
-        </KbdGroup>
-        <span>char left</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Ctrl</Kbd>
-          <span>+</span>
-          <Kbd>F</Kbd>
-        </KbdGroup>
-        <span>char right</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Alt</Kbd>
-          <span>+</span>
-          <Kbd>B</Kbd>
-        </KbdGroup>
-        <span>word left</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Alt</Kbd>
-          <span>+</span>
-          <Kbd>F</Kbd>
-        </KbdGroup>
-        <span>word right</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Ctrl</Kbd>
-          <span>+</span>
-          <Kbd>Alt</Kbd>
-          <span>+</span>
-          <Kbd>H</Kbd>
-        </KbdGroup>
-        <span>del word</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Ctrl</Kbd>
-          <span>+</span>
-          <Kbd>H</Kbd>
-        </KbdGroup>
-        <span>del char</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Ctrl</Kbd>
-          <span>+</span>
-          <Kbd>D</Kbd>
-        </KbdGroup>
-        <span>del forward</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Alt</Kbd>
-          <span>+</span>
-          <Kbd>D</Kbd>
-        </KbdGroup>
-        <span>del word fwd</span>
-      </span>
-      <span className="inline-flex items-center gap-1">
-        <KbdGroup>
-          <Kbd>Ctrl</Kbd>
-          <span>+</span>
-          <Kbd>U</Kbd>
-        </KbdGroup>
-        <span>del to start</span>
+        <span>shortcuts</span>
       </span>
       <span className="inline-flex items-center gap-1">
         <Kbd>Enter</Kbd>
