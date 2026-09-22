@@ -13,5 +13,13 @@ export default defineConfig({
       requireAssertions: true,
     },
     restoreMocks: true,
+    server: {
+      deps: {
+        // next-intl's ESM middleware imports `next/server`, which Node's
+        // native ESM resolver can't resolve — let Vite process it instead.
+        // https://next-intl.dev/docs/environments/testing#vitest
+        inline: ["next-intl"],
+      },
+    },
   },
 });

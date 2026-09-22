@@ -1,6 +1,11 @@
 /** @vitest-environment happy-dom */
 import { screen } from "@testing-library/react";
-import { pushMock, renderWithMedications, searchPlaceholder } from "./command-box.test-utils";
+import {
+  medicationHref,
+  pushMock,
+  renderWithMedications,
+  searchPlaceholder,
+} from "./command-box.test-utils";
 
 describe("medication sidebar", () => {
   it("gives the sidebar keyboard focus after the add command box closes", async () => {
@@ -8,6 +13,15 @@ describe("medication sidebar", () => {
 
     const boots = screen.getByRole("link", { name: "Boots" });
     expect(boots.getAttribute("aria-current")).toBe("true");
+  });
+
+  // The link uses the object form required for dynamic segments, so assert the
+  // URL it actually resolves to rather than the shape of the prop.
+  it("links each medication to its localized detail page", async () => {
+    await renderWithMedications("boots", "corner");
+
+    expect(screen.getByRole("link", { name: "Boots" }).getAttribute("href")).toBe("/en/boots");
+    expect(screen.getByRole("link", { name: "Corner" }).getAttribute("href")).toBe("/en/corner");
   });
 
   it("moves the selection down with 'j' and up with 'k'", async () => {
@@ -65,7 +79,7 @@ describe("medication sidebar", () => {
     await user.keyboard("j");
     await user.keyboard("{Enter}");
 
-    expect(pushMock).toHaveBeenCalledWith("/corner");
+    expect(pushMock).toHaveBeenCalledWith(medicationHref("corner"));
   });
 
   it("navigates to the first medication with Enter when nothing is selected", async () => {
@@ -73,7 +87,7 @@ describe("medication sidebar", () => {
 
     await user.keyboard("{Enter}");
 
-    expect(pushMock).toHaveBeenCalledWith("/boots");
+    expect(pushMock).toHaveBeenCalledWith(medicationHref("boots"));
   });
 
   it("deletes the selected medication with 'x' and keeps the selection position", async () => {

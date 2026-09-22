@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useExtracted } from "next-intl";
 
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import {
@@ -17,6 +16,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { Link, useRouter } from "@/i18n/navigation";
+import { isEditableTarget } from "@/lib/editable-target";
 import { useAddedMedications } from "./medications-provider";
 import { useGotoKeys } from "@/hooks/use-goto-keys";
 
@@ -25,7 +27,58 @@ export interface MedicationSidebarProps {
   onOpenDialog: (dialog: "add" | "search") => void;
 }
 
+const footerHints = [
+  { keys: ["a"], id: "add" },
+  { keys: ["j", "k"], id: "move" },
+  { keys: ["gg"], id: "top" },
+  { keys: ["G"], id: "bottom" },
+  { keys: ["Enter"], id: "open" },
+  { keys: ["x"], id: "remove" },
+  { keys: ["Ctrl", "B"], id: "toggle" },
+] as const;
+
+type FooterHintId = (typeof footerHints)[number]["id"];
+
+/**
+ * Extracted labels, keyed by hint id.
+ *
+ * Messages must be string literals passed to `t` inside the function body that
+ * created it, so the labels live here and the list above only looks them up.
+ */
+function useFooterHintLabels(): Record<FooterHintId, string> {
+  const t = useExtracted();
+
+  return {
+    add: t({ message: "add", description: "Sidebar footer hint: add a medication" }),
+    move: t({ message: "move", description: "Sidebar footer hint: move the selection" }),
+    top: t({ message: "top", description: "Sidebar footer hint: jump to the first item" }),
+    bottom: t({ message: "bottom", description: "Sidebar footer hint: jump to the last item" }),
+    open: t({ message: "open", description: "Sidebar footer hint: open the selected medication" }),
+    remove: t({ message: "remove", description: "Sidebar footer hint: remove the selected medication" }),
+    toggle: t({ message: "toggle", description: "Sidebar footer hint: collapse or expand the sidebar" }),
+  };
+}
+
+function FooterHint({ keys, label }: { keys: readonly string[]; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1">
+      {keys.length > 1 ? (
+        <KbdGroup>
+          {keys.map((key) => (
+            <Kbd key={key}>{key}</Kbd>
+          ))}
+        </KbdGroup>
+      ) : (
+        <Kbd>{keys[0]}</Kbd>
+      )}
+      <span>{label}</span>
+    </span>
+  );
+}
+
 export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarProps) {
+  const t = useExtracted();
+  const footerHintLabels = useFooterHintLabels();
   const { added, removeMedication } = useAddedMedications();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -46,10 +99,7 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
     function onKeyDown(event: KeyboardEvent) {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
 
-      const target = event.target as HTMLElement | null;
-      const isTyping =
-        target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable;
-      if (isTyping) return;
+      if (isEditableTarget(event.target)) return;
 
       if (gotoKeyDown(event)) return;
 
@@ -71,7 +121,7 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
         const selected = added[selectedIndex] ?? added[0];
         if (selected) {
           event.preventDefault();
-          router.push(`/${selected.slug}`);
+          router.push({ pathname: "/[slug]", params: { slug: selected.slug } });
         }
         return;
       }
@@ -109,11 +159,15 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Medications</SidebarGroupLabel>
+          <SidebarGroupLabel>{t({ message: "Medications", description: "Heading of the medication group" })}</SidebarGroupLabel>
           <SidebarGroupContent>
             {added.length === 0 ? (
               <p className="px-2 py-1.5 text-xs text-sidebar-foreground/70">
-                Press <Kbd>a</Kbd> to add a medication.
+                {t.rich({
+                  message: "Press <kbd>a</kbd> to add a medication.",
+                  description: "Shown in the sidebar when no medication has been added yet",
+                  values: { kbd: (chunks) => <Kbd>{chunks}</Kbd> },
+                })}
               </p>
             ) : (
               <SidebarMenu>
@@ -127,7 +181,9 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
                       }}
                     >
                       <SidebarMenuButton
-                        render={<Link href={`/${medication.slug}`} />}
+                        render={
+                          <Link href={{ pathname: "/[slug]", params: { slug: medication.slug } }} />
+                        }
                         isActive={selected}
                         aria-current={selected ? "true" : undefined}
                       >
@@ -142,44 +198,13 @@ export function MedicationSidebar({ active, onOpenDialog }: MedicationSidebarPro
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t border-sidebar-border">
+        <LanguageSwitcher />
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-2 py-1.5 text-xs text-sidebar-foreground/70">
-          <span className="inline-flex items-center gap-1">
-            <Kbd>a</Kbd>
-            <span>add</span>
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <KbdGroup>
-              <Kbd>j</Kbd>
-              <Kbd>k</Kbd>
-            </KbdGroup>
-            <span>move</span>
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <Kbd>gg</Kbd>
-            <span>top</span>
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <Kbd>G</Kbd>
-            <span>bottom</span>
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <Kbd>Enter</Kbd>
-            <span>open</span>
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <Kbd>x</Kbd>
-            <span>remove</span>
-          </span>
-          <span className="inline-flex items-center gap-1">
-            <KbdGroup>
-              <Kbd>Ctrl</Kbd>
-              <Kbd>B</Kbd>
-            </KbdGroup>
-            <span>toggle</span>
-          </span>
+          {footerHints.map(({ keys, id }) => (
+            <FooterHint key={id} keys={keys} label={footerHintLabels[id]} />
+          ))}
         </div>
       </SidebarFooter>
     </Sidebar>
   );
 }
-

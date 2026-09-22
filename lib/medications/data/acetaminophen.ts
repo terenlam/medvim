@@ -3,7 +3,8 @@ import type { Medication } from "../type";
 export const medication = {
   slug: "acetaminophen",
   name: "Acetaminophen",
-  summary: `
+  summary: {
+    en: `
 Acetaminophen, also known as paracetamol, is one of the most widely used medicines for relieving pain and reducing fever. It is available in many countries under different brand names and is sold both as a prescription medicine and as an over-the-counter (OTC) product. Because it is inexpensive, readily available, and generally well tolerated when taken correctly, acetaminophen is commonly used by adults and children. It is often found in household medicine cabinets and is included as an ingredient in many combination products used to treat colds, flu, headaches, and other common illnesses.
 
 Acetaminophen belongs to a group of medicines known primarily for their analgesic, or pain-relieving, and antipyretic, or fever-reducing, effects. Unlike nonsteroidal anti-inflammatory drugs (NSAIDs), such as ibuprofen and naproxen, acetaminophen has relatively little anti-inflammatory activity at typical doses. This makes it particularly useful when the main goal is to reduce pain or fever rather than inflammation. It can be used for a wide variety of mild to moderate painful conditions, including headaches, toothaches, muscle aches, menstrual cramps, back pain, and pain associated with minor injuries.
@@ -28,4 +29,5 @@ Acetaminophen does not treat the underlying cause of most illnesses that produce
 
 In conclusion, acetaminophen is a widely used analgesic and antipyretic medicine that plays an important role in the management of pain and fever. Its effectiveness, accessibility, and relatively favorable safety profile when used correctly have made it one of the most familiar medicines worldwide. However, its safety depends heavily on appropriate dosing and careful attention to combination products. Excessive use can cause severe liver damage, making responsible use essential. Understanding both the benefits and risks of acetaminophen allows people to use this common medicine more safely and effectively.
 `,
+  },
 } satisfies Medication;

@@ -1,0 +1,263 @@
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @eloqnt/format-po\n"
+"X-Message-Key: msgctxt\n"
+
+#. Title of the about page
+#. Shortcut that opens the about page
+#: app/[lang]/about/page.tsx
+#: app/dashboard.tsx
+msgctxt "g5pX-a"
+msgid "About"
+msgstr "À propos"
+
+#. Meta description of the app
+#: app/[lang]/layout.tsx
+msgctxt "Xz9pp1"
+msgid "Medication management for healthcare professionals caring for older adults."
+msgstr "Gestion des médicaments pour les professionnels de la santé qui soignent les personnes âgées."
+
+#. Heading of the medication group
+#: app/command-box.tsx
+#: app/sidebar.tsx
+msgctxt "gOuYI7"
+msgid "Medications"
+msgstr "Médicaments"
+
+#. Footer hint: go to the next suggestion
+#: app/command-box.tsx
+msgctxt "izd_bu"
+msgid "next"
+msgstr "suivant"
+
+#. Footer hint: go to the previous suggestion
+#: app/command-box.tsx
+msgctxt "VtY8ux"
+msgid "prev"
+msgstr "précédent"
+
+#. Footer hint: open the editing shortcuts help
+#: app/command-box.tsx
+msgctxt "tF97cs"
+msgid "shortcuts"
+msgstr "raccourcis"
+
+#. Footer hint: open the highlighted suggestion
+#: app/command-box.tsx
+msgctxt "J4SQjQ"
+msgid "select"
+msgstr "sélectionner"
+
+#. Title of the medication search dialog
+#: app/command-box.tsx
+msgctxt "dynytk"
+msgid "Search medications"
+msgstr "Rechercher des médicaments"
+
+#. Subtitle of the medication search dialog
+#: app/command-box.tsx
+msgctxt "fbzCh5"
+msgid "Find a medication to open."
+msgstr "Trouvez un médicament à ouvrir."
+
+#. Placeholder of the search input
+#: app/command-box.tsx
+msgctxt "Kmoxw9"
+msgid "Type a command or search..."
+msgstr "Tapez une commande ou recherchez..."
+
+#. Title of the add-medication dialog
+#: app/command-box.tsx
+msgctxt "pL3K-o"
+msgid "Add Medication"
+msgstr "Ajouter un médicament"
+
+#. Subtitle of the add-medication dialog
+#: app/command-box.tsx
+msgctxt "Dv8Y5j"
+msgid "Add a medication to your list."
+msgstr "Ajoutez un médicament à votre liste."
+
+#. Placeholder of the medication name input
+#: app/command-box.tsx
+msgctxt "alIiJY"
+msgid "Type a medication name..."
+msgstr "Tapez le nom d'un médicament..."
+
+#. Shown when every medication is already on the list
+#: app/command-box.tsx
+msgctxt "wuujer"
+msgid "No more medications to add."
+msgstr "Aucun autre médicament à ajouter."
+
+#. Shortcut that opens the medication search
+#: app/dashboard.tsx
+msgctxt "xmcVZ0"
+msgid "Search"
+msgstr "Rechercher"
+
+#. Shortcut that switches the interface language
+#: app/dashboard.tsx
+msgctxt "Dashboard.language"
+msgid "En -> Fr"
+msgstr "Fr -> En"
+
+#. Accessible name of the shortcut list
+#: app/dashboard.tsx
+msgctxt "ULX6CG"
+msgid "Dashboard shortcuts"
+msgstr "Raccourcis du tableau de bord"
+
+#. Sidebar footer hint: add a medication
+#: app/sidebar.tsx
+msgctxt "GH0hAP"
+msgid "add"
+msgstr "ajouter"
+
+#. Sidebar footer hint: move the selection
+#: app/sidebar.tsx
+msgctxt "3ATcmQ"
+msgid "move"
+msgstr "déplacer"
+
+#. Sidebar footer hint: jump to the first item
+#: app/sidebar.tsx
+msgctxt "D6yns0"
+msgid "top"
+msgstr "haut"
+
+#. Sidebar footer hint: jump to the last item
+#: app/sidebar.tsx
+msgctxt "MeBKMm"
+msgid "bottom"
+msgstr "bas"
+
+#. Sidebar footer hint: open the selected medication
+#: app/sidebar.tsx
+msgctxt "-9qP4Y"
+msgid "open"
+msgstr "ouvrir"
+
+#. Sidebar footer hint: remove the selected medication
+#: app/sidebar.tsx
+msgctxt "1LmW-v"
+msgid "remove"
+msgstr "retirer"
+
+#. Sidebar footer hint: collapse or expand the sidebar
+#: app/sidebar.tsx
+msgctxt "0QfDUF"
+msgid "toggle"
+msgstr "plier/déplier"
+
+#. Shown in the sidebar when no medication has been added yet
+#: app/sidebar.tsx
+msgctxt "QXIZMk"
+msgid "Press <kbd>a</kbd> to add a medication."
+msgstr "Appuyez sur <kbd>a</kbd> pour ajouter un médicament."
+
+#. Editing command: move the cursor to the start of the line
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "zTylMM"
+msgid "start"
+msgstr "début"
+
+#. Editing command: move the cursor to the end of the line
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "tNbVcy"
+msgid "end"
+msgstr "fin"
+
+#. Editing command: move the cursor one character left
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "MuATEK"
+msgid "char left"
+msgstr "car. à gauche"
+
+#. Editing command: move the cursor one character right
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "AvNUI3"
+msgid "char right"
+msgstr "car. à droite"
+
+#. Editing command: move the cursor one word left
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "wwDWaw"
+msgid "word left"
+msgstr "mot à gauche"
+
+#. Editing command: move the cursor one word right
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "1RlVVf"
+msgid "word right"
+msgstr "mot à droite"
+
+#. Editing command: delete the word before the cursor
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "1nhibN"
+msgid "del word"
+msgstr "suppr. mot"
+
+#. Editing command: delete the character before the cursor
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "KiYLjh"
+msgid "del char"
+msgstr "suppr. car."
+
+#. Editing command: delete the character after the cursor
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "qi5X1e"
+msgid "del forward"
+msgstr "suppr. vers l'avant"
+
+#. Editing command: delete the word after the cursor
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "yhJ3rU"
+msgid "del word fwd"
+msgstr "suppr. mot av."
+
+#. Editing command: delete everything before the cursor
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "72W211"
+msgid "del to start"
+msgstr "suppr. jusqu'au début"
+
+#. Title of the editing shortcuts help dialog
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "7_d2_3"
+msgid "Editing shortcuts"
+msgstr "Raccourcis de saisie"
+
+#. Subtitle of the editing shortcuts help dialog
+#: components/editing-shortcuts-dialog.tsx
+msgctxt "eDz0_9"
+msgid "Keyboard shortcuts available while editing text."
+msgstr "Raccourcis clavier disponibles pendant la saisie de texte."
+
+#. Accessible name of the dialog close button
+#: components/ui/dialog.tsx
+#: components/ui/sheet.tsx
+msgctxt "rbrahO"
+msgid "Close"
+msgstr "Fermer"
+
+#. Accessible name of the mobile sidebar
+#: components/ui/sidebar.tsx
+msgctxt "JZy6jo"
+msgid "Sidebar"
+msgstr "Barre latérale"
+
+#. Accessible description of the mobile sidebar
+#: components/ui/sidebar.tsx
+msgctxt "O8JL7S"
+msgid "Displays the mobile sidebar."
+msgstr "Affiche la barre latérale mobile."
+
+#. Accessible name of the sidebar toggle button
+#: components/ui/sidebar.tsx
+msgctxt "kh4wt0"
+msgid "Toggle Sidebar"
+msgstr "Afficher ou masquer la barre latérale"

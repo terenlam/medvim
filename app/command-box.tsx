@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useExtracted } from "next-intl";
 import { defaultFilter, useCommandState } from "cmdk";
 
 import {
@@ -17,6 +17,7 @@ import {
 import { medications } from "@/lib/medications/medications";
 
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { useRouter } from "@/i18n/navigation";
 import { useAddedMedications } from "./medications-provider";
 
 const MAX_ITEMS = 5;
@@ -32,6 +33,7 @@ function MedicationCommandList({
   excludeSlugs?: ReadonlySet<string>;
   emptyMessage?: string;
 }) {
+  const t = useExtracted();
   const search = useCommandState((state) => state.search);
 
   const visible = medications
@@ -64,7 +66,7 @@ function MedicationCommandList({
   }, [open, visible, onSelect]);
 
   return (
-    <CommandGroup heading="Medications">
+    <CommandGroup heading={t({ message: "Medications", description: "Heading of the medication group" })}>
       {visible.length === 0 && emptyMessage && <CommandEmpty>{emptyMessage}</CommandEmpty>}
       {visible.map((medication, index) => (
         <CommandItem
@@ -83,6 +85,8 @@ function MedicationCommandList({
 }
 
 function FooterHints() {
+  const t = useExtracted();
+
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t px-2 py-1.5 text-xs text-muted-foreground">
       <span className="inline-flex items-center gap-1">
@@ -91,7 +95,7 @@ function FooterHints() {
           <span>+</span>
           <Kbd>J</Kbd>
         </KbdGroup>
-        <span>next</span>
+        <span>{t({ message: "next", description: "Footer hint: go to the next suggestion" })}</span>
       </span>
       <span className="inline-flex items-center gap-1">
         <KbdGroup>
@@ -99,7 +103,7 @@ function FooterHints() {
           <span>+</span>
           <Kbd>K</Kbd>
         </KbdGroup>
-        <span>prev</span>
+        <span>{t({ message: "prev", description: "Footer hint: go to the previous suggestion" })}</span>
       </span>
       <span className="inline-flex items-center gap-1">
         <KbdGroup>
@@ -107,11 +111,11 @@ function FooterHints() {
           <span>+</span>
           <Kbd>/</Kbd>
         </KbdGroup>
-        <span>shortcuts</span>
+        <span>{t({ message: "shortcuts", description: "Footer hint: open the editing shortcuts help" })}</span>
       </span>
       <span className="inline-flex items-center gap-1">
         <Kbd>Enter</Kbd>
-        <span>select</span>
+        <span>{t({ message: "select", description: "Footer hint: open the highlighted suggestion" })}</span>
       </span>
     </div>
   );
@@ -124,17 +128,26 @@ export function SearchMedicationCommand({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const t = useExtracted();
   const router = useRouter();
 
   function openMedication(slug: string) {
     onOpenChange(false);
-    router.push(`/${slug}`);
+    router.push({ pathname: "/[slug]", params: { slug } });
   }
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange}>
+    <CommandDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t({ message: "Search medications", description: "Title of the medication search dialog" })}
+      description={t({ message: "Find a medication to open.", description: "Subtitle of the medication search dialog" })}
+    >
       <Command shouldFilter={false} loop>
-        <CommandInput placeholder="Type a command or search..." autoFocus />
+        <CommandInput
+          placeholder={t({ message: "Type a command or search...", description: "Placeholder of the search input" })}
+          autoFocus
+        />
         <CommandList>
           <MedicationCommandList open={open} onSelect={openMedication} />
         </CommandList>
@@ -151,6 +164,7 @@ export function AddMedicationCommand({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const t = useExtracted();
   const { added, addMedication } = useAddedMedications();
   const [query, setQuery] = useState("");
 
@@ -168,14 +182,14 @@ export function AddMedicationCommand({
     <CommandDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Add Medication"
-      description="Add a medication to your list."
+      title={t({ message: "Add Medication", description: "Title of the add-medication dialog" })}
+      description={t({ message: "Add a medication to your list.", description: "Subtitle of the add-medication dialog" })}
     >
       <Command shouldFilter={false} loop>
         <CommandInput
           value={query}
           onValueChange={setQuery}
-          placeholder="Type a medication name..."
+          placeholder={t({ message: "Type a medication name...", description: "Placeholder of the medication name input" })}
           autoFocus
         />
         <CommandList>
@@ -183,7 +197,7 @@ export function AddMedicationCommand({
             open={open}
             onSelect={addMedicationBySlug}
             excludeSlugs={excludeSlugs}
-            emptyMessage="No more medications to add."
+            emptyMessage={t({ message: "No more medications to add.", description: "Shown when every medication is already on the list" })}
           />
         </CommandList>
         <FooterHints />

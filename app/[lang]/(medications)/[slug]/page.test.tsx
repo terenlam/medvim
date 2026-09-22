@@ -6,7 +6,7 @@ import Page, { generateMetadata, generateStaticParams } from "./page";
 
 function pageProps(slug: string) {
   return {
-    params: Promise.resolve({ slug }),
+    params: Promise.resolve({ lang: "en", slug }),
     searchParams: Promise.resolve({}) as Promise<Record<string, string | string[] | undefined>>,
   };
 }

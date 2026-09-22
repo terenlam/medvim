@@ -1,5 +1,5 @@
 /** @vitest-environment happy-dom */
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -8,12 +8,13 @@ import {
   searchPlaceholder,
   visibleMedications,
 } from "./command-box.test-utils";
+import { renderWithIntl } from "@/test/intl";
 import { AppShell } from "./app-shell";
 
 describe("readline-style editing shortcuts", () => {
   it("deletes the character to the left with Ctrl+H", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -26,7 +27,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("deletes the word to the left with Ctrl+Alt+H and re-filters the list", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -42,7 +43,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("moves to the start with Ctrl+A and to the end with Ctrl+E", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -60,7 +61,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("moves the caret by one character with Ctrl+B and Ctrl+F", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -83,7 +84,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("moves the caret by one word with Alt+B and Alt+F", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -105,7 +106,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("deletes the character under the caret with Ctrl+D", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -122,7 +123,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("deletes to the start with Ctrl+U", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -136,7 +137,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("deletes the next word with Alt+D", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -153,7 +154,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("keeps the controlled add-medication query in sync with Ctrl+H", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     const input = screen.getByPlaceholderText("Type a medication name...") as HTMLInputElement;
@@ -165,7 +166,7 @@ describe("readline-style editing shortcuts", () => {
 
   it("keeps the controlled add-medication query in sync with Ctrl+U", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     const input = screen.getByPlaceholderText("Type a medication name...") as HTMLInputElement;

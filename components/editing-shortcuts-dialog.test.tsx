@@ -1,25 +1,26 @@
 /** @vitest-environment happy-dom */
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+import { renderWithIntl } from "@/test/intl";
 import { EDITING_SHORTCUTS } from "./editing-shortcuts-dialog";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
 describe("EDITING_SHORTCUTS", () => {
   it("contains the 11 editing hints", () => {
-    expect(EDITING_SHORTCUTS.map(({ label }) => label)).toEqual([
+    expect(EDITING_SHORTCUTS.map(({ id }) => id)).toEqual([
       "start",
       "end",
-      "char left",
-      "char right",
-      "word left",
-      "word right",
-      "del word",
-      "del char",
-      "del forward",
-      "del word fwd",
-      "del to start",
+      "charLeft",
+      "charRight",
+      "wordLeft",
+      "wordRight",
+      "delWord",
+      "delChar",
+      "delForward",
+      "delWordFwd",
+      "delToStart",
     ]);
   });
 });
@@ -27,7 +28,7 @@ describe("EDITING_SHORTCUTS", () => {
 describe("editing shortcuts help", () => {
   it("opens the help dialog with Ctrl+/ in an Input without changing its value", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="abc" />);
+    renderWithIntl(<Input defaultValue="abc" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -41,21 +42,26 @@ describe("editing shortcuts help", () => {
 
   it("lists every editing shortcut in a scrollable region", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="abc" />);
+    renderWithIntl(<Input defaultValue="abc" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
     await user.keyboard("{Control>}/{/Control}");
 
-    for (const shortcut of EDITING_SHORTCUTS) {
-      expect(screen.getByText(shortcut.label)).toBeDefined();
-    }
+    // One labelled row per shortcut, each with its own label: `useExtracted`
+    // calls aren't compiled under Vitest, so the assertions stay on structure
+    // rather than on the (translated) label copy.
+    const rows = screen.getAllByRole("listitem");
+    expect(rows.map((row) => row.getAttribute("data-shortcut-id"))).toEqual(
+      EDITING_SHORTCUTS.map(({ id }) => id),
+    );
+    expect(new Set(rows.map((row) => row.textContent)).size).toBe(rows.length);
     expect(screen.getByTestId("editing-shortcuts-scroll").className).toContain("overflow-y-auto");
   });
 
   it("opens the help dialog with Ctrl+/ in a Textarea", async () => {
     const user = userEvent.setup();
-    render(<Textarea defaultValue="hello" />);
+    renderWithIntl(<Textarea defaultValue="hello" />);
 
     const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
     await user.click(textarea);
@@ -67,7 +73,7 @@ describe("editing shortcuts help", () => {
 
   it("does not open the help dialog for Ctrl+Shift+/ or a bare /", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="" />);
+    renderWithIntl(<Input defaultValue="" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -82,7 +88,7 @@ describe("editing shortcuts help", () => {
 
   it("closes the help dialog with Escape", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="abc" />);
+    renderWithIntl(<Input defaultValue="abc" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);

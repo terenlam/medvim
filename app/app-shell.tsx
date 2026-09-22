@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { isEditableTarget } from "@/lib/editable-target";
 import { AddMedicationCommand, SearchMedicationCommand } from "./command-box";
 import { AddedMedicationsProvider } from "./medications-provider";
 import { MedicationSidebar } from "./sidebar";
@@ -13,10 +14,16 @@ export type DialogKind = "add" | "search";
 
 const SCROLL_STEP = 32;
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  defaultOpen = true,
+}: {
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
   return (
     <AddedMedicationsProvider>
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={defaultOpen}>
         <Shell>{children}</Shell>
       </SidebarProvider>
     </AddedMedicationsProvider>
@@ -46,10 +53,7 @@ function Shell({ children }: { children: React.ReactNode }) {
     function onKeyDown(event: KeyboardEvent) {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
 
-      const target = event.target as HTMLElement | null;
-      const isTyping =
-        target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable;
-      if (isTyping) return;
+      if (isEditableTarget(event.target)) return;
 
       if (gotoKeyDown(event)) return;
 

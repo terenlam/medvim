@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
+import { useExtracted } from "next-intl"
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
@@ -46,6 +47,8 @@ function SheetContent({
   side?: "top" | "right" | "bottom" | "left"
   showCloseButton?: boolean
 }) {
+  const t = useExtracted()
+
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -72,7 +75,9 @@ function SheetContent({
           >
             <XIcon
             />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">
+              {t({ message: "Close", description: "Accessible name of the dialog close button" })}
+            </span>
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Popup>
