@@ -1,14 +1,15 @@
 /** @vitest-environment happy-dom */
 import { hiddenMedication, visibleMedications } from "./command-box.test-utils";
 import { medications } from "@/lib/medications/medications";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AppShell } from "./app-shell";
+import { renderWithIntl } from "@/test/intl";
 
 describe("add medication command box", () => {
   it("opens the add command box when pressing 'a' in normal mode", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
 
@@ -17,7 +18,7 @@ describe("add medication command box", () => {
 
   it("selecting a medication adds it to the sidebar and stays open", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     await user.click(screen.getByText(visibleMedications[0].name));
@@ -30,7 +31,7 @@ describe("add medication command box", () => {
 
   it("allows adding multiple medications before closing", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     await user.click(screen.getByText(visibleMedications[0].name));
@@ -45,7 +46,7 @@ describe("add medication command box", () => {
 
   it("hides already added medications from the add list", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     await user.click(screen.getByText(visibleMedications[0].name));
@@ -64,7 +65,7 @@ describe("add medication command box", () => {
 
   it("clears the search after adding a medication", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     const input = screen.getByPlaceholderText("Type a medication name...") as HTMLInputElement;
@@ -76,7 +77,7 @@ describe("add medication command box", () => {
 
   it("shows an empty message once every medication has been added", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     const input = screen.getByPlaceholderText("Type a medication name...") as HTMLInputElement;
@@ -93,7 +94,7 @@ describe("add medication command box", () => {
 
   it("adds a medication that is not in the default list when searching for it", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("a");
     await user.type(screen.getByPlaceholderText("Type a medication name..."), "gospel");

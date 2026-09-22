@@ -1,14 +1,15 @@
 /** @vitest-environment happy-dom */
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+import { renderWithIntl } from "@/test/intl";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
 
 describe("Input", () => {
   it("deletes the word to the left with Ctrl+Alt+H", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="the quick brown fox" />);
+    renderWithIntl(<Input defaultValue="the quick brown fox" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -21,7 +22,7 @@ describe("Input", () => {
 
   it("deletes the character to the left with Ctrl+H", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="abc" />);
+    renderWithIntl(<Input defaultValue="abc" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -34,7 +35,7 @@ describe("Input", () => {
 
   it("moves the caret to the start with Ctrl+A and to the end with Ctrl+E", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="abc" />);
+    renderWithIntl(<Input defaultValue="abc" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -52,7 +53,7 @@ describe("Input", () => {
 
   it("moves the caret one character back with Ctrl+B and one word forward with Alt+F", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="abc def" />);
+    renderWithIntl(<Input defaultValue="abc def" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -75,7 +76,7 @@ describe("Input", () => {
 
   it("deletes the character under the caret with Ctrl+D and to the start with Ctrl+U", async () => {
     const user = userEvent.setup();
-    render(<Input defaultValue="abc" />);
+    renderWithIntl(<Input defaultValue="abc" />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -94,7 +95,7 @@ describe("Input", () => {
   it("still calls a consumer-provided onKeyDown", async () => {
     const onKeyDown = vi.fn();
     const user = userEvent.setup();
-    render(<Input defaultValue="abc" onKeyDown={onKeyDown} />);
+    renderWithIntl(<Input defaultValue="abc" onKeyDown={onKeyDown} />);
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
     await user.click(input);
@@ -107,7 +108,7 @@ describe("Input", () => {
 describe("Textarea", () => {
   it("deletes the word to the left with Ctrl+Alt+H", async () => {
     const user = userEvent.setup();
-    render(<Textarea defaultValue="hello world" />);
+    renderWithIntl(<Textarea defaultValue="hello world" />);
 
     const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
     await user.click(textarea);

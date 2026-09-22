@@ -1,19 +1,21 @@
 /** @vitest-environment happy-dom */
 import {
   hiddenMedication,
+  medicationHref,
   openSearch,
   pushMock,
   searchPlaceholder,
   visibleMedications,
 } from "./command-box.test-utils";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AppShell } from "./app-shell";
+import { renderWithIntl } from "@/test/intl";
 
 describe("search command box", () => {
   it("lists every visible medication with its Alt shortcut", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
 
@@ -27,7 +29,7 @@ describe("search command box", () => {
 
   it("shows only the first 5 medications by default", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
 
@@ -37,7 +39,7 @@ describe("search command box", () => {
 
   it("reveals a hidden medication when searching for it", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     await user.type(screen.getByPlaceholderText(searchPlaceholder), "gospel");
@@ -48,28 +50,28 @@ describe("search command box", () => {
 
   it("navigates to the medication at the filtered position with Alt+n", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     await user.type(screen.getByPlaceholderText(searchPlaceholder), "o");
     await user.keyboard("{Alt>}5{/Alt}");
 
-    expect(pushMock).toHaveBeenCalledWith("/gospel");
+    expect(pushMock).toHaveBeenCalledWith(medicationHref("gospel"));
   });
 
   it("navigates to the medication page when selecting an item", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     await user.click(screen.getByText(visibleMedications[0].name));
 
-    expect(pushMock).toHaveBeenCalledWith(`/${visibleMedications[0].slug}`);
+    expect(pushMock).toHaveBeenCalledWith(medicationHref(visibleMedications[0].slug));
   });
 
   it("moves to the next medication with Ctrl+J", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -83,7 +85,7 @@ describe("search command box", () => {
 
   it("moves to the previous medication with Ctrl+K", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -98,7 +100,7 @@ describe("search command box", () => {
 
   it("shows the Ctrl+J and Ctrl+K navigation keybindings", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
 
@@ -112,7 +114,7 @@ describe("search command box", () => {
 
   it("shows the Ctrl+/ shortcuts hint in the footer", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
 

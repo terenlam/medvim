@@ -1,18 +1,19 @@
 /** @vitest-environment happy-dom */
 import { openSearch, searchPlaceholder } from "./command-box.test-utils";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AppShell } from "./app-shell";
+import { renderWithIntl } from "@/test/intl";
 
 describe("AppShell command boxes", () => {
   it("does not open the search command box until 's' is pressed", () => {
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
     expect(screen.queryByPlaceholderText(searchPlaceholder)).toBeNull();
   });
 
   it("opens the search command box when pressing 's' in normal mode", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await user.keyboard("s");
 
@@ -21,7 +22,7 @@ describe("AppShell command boxes", () => {
 
   it("does not open when typing 's' into another text field", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     const field = document.createElement("input");
     document.body.appendChild(field);
@@ -36,7 +37,7 @@ describe("AppShell command boxes", () => {
 
   it("types 's' into the input instead of reopening when open", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     const input = screen.getByPlaceholderText(searchPlaceholder) as HTMLInputElement;
@@ -49,7 +50,7 @@ describe("AppShell command boxes", () => {
 
   it("closes the search command box when pressing Escape", async () => {
     const user = userEvent.setup();
-    render(<AppShell>content</AppShell>);
+    renderWithIntl(<AppShell>content</AppShell>);
 
     await openSearch(user);
     await user.keyboard("{Escape}");
